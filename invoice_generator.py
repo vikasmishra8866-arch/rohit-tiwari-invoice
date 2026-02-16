@@ -1,165 +1,117 @@
+import streamlit as st
 from reportlab.lib.pagesizes import A4
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.lib.units import inch, mm
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
-from reportlab.lib.enums import TA_RIGHT, TA_CENTER
 from reportlab.lib import colors
-import datetime
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, Image
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.units import mm
+import io
+from datetime import date
 
-def generate_invoice(filename="elite_invoice.pdf", invoice_data=None):
-    doc = SimpleDocTemplate(filename, pagesize=A4,
-                            rightMargin=20*mm, leftMargin=20*mm,
-                            topMargin=20*mm, bottomMargin=20*mm)
+# --- Page Setup ---
+st.set_page_config(page_title="Elite Invoice Generator", layout="wide")
+st.title("📑 Professional Sales Invoice Maker")
+
+# --- Sidebar: Company & Logo ---
+with st.sidebar:
+    st.header("🏢 Your Company Details")
+    logo_file = st.file_uploader("Upload Company Logo", type=['jpg', 'png', 'jpeg'])
+    company_name = st.text_input("Company Name", "MG MOTORS")
+    company_addr = st.text_area("Address", "SHOP NO-1, NILKANTH VILLA, SURAT")
+    company_mob = st.text_input("Mobile", "8200575486")
     
+    st.divider()
+    st.header("🏦 Bank Details")
+    bank_name = st.text_input("Bank Name", "Bank of Baroda")
+    acc_no = st.text_input("Account Number", "02810100054800")
+    ifsc = st.text_input("IFSC Code", "BARB0UDHNAX")
+
+# --- Main UI: Customer & Invoice Info ---
+col1, col2 = st.columns(2)
+with col1:
+    st.subheader("👤 Customer Details")
+    cust_name = st.text_input("Customer/Business Name", "AGARWAL ENTERPRISE")
+    cust_mob = st.text_input("Customer Mobile", "9998944200")
+    vehicle_no = st.text_input("Vehicle Number (Optional)", "GJ05BY9222")
+
+with col2:
+    st.subheader("📄 Invoice Info")
+    inv_no = st.text_input("Invoice Number", "495")
+    inv_date = st.date_input("Invoice Date", date.today())
+
+# --- Items Table ---
+st.subheader("🛒 Items & Services")
+if 'items' not in st.session_state:
+    st.session_state.items = [{"desc": "", "qty": 1, "rate": 0.0}]
+
+def add_item():
+    st.session_state.items.append({"desc": "", "qty": 1, "rate": 0.0})
+
+for i, item in enumerate(st.session_state.items):
+    c1, c2, c3 = st.columns([3, 1, 1])
+    st.session_state.items[i]['desc'] = c1.text_input(f"Description {i+1}", item['desc'], key=f"desc_{i}")
+    st.session_state.items[i]['qty'] = c2.number_input(f"Qty {i+1}", min_value=1, value=item['qty'], key=f"qty_{i}")
+    st.session_state.items[i]['rate'] = c3.number_input(f"Rate {i+1}", min_value=0.0, value=item['rate'], key=f"rate_{i}")
+
+st.button("➕ Add More Item", on_click=add_item)
+
+# --- PDF Generation Logic ---
+def generate_pdf():
+    buffer = io.BytesIO()
+    doc = SimpleDocTemplate(buffer, pagesize=A4, rightMargin=30, leftMargin=30, topMargin=30, bottomMargin=30)
     styles = getSampleStyleSheet()
-    
-    # Custom Styles
-    styles.add(ParagraphStyle(name='InvoiceHeader', fontName='Helvetica-Bold', fontSize=24, alignment=TA_CENTER, textColor=colors.HexColor('#1a73e8')))
-    styles.add(ParagraphStyle(name='CompanyInfo', fontName='Helvetica-Bold', fontSize=12, alignment=TA_RIGHT, textColor=colors.black))
-    styles.add(ParagraphStyle(name='AddressInfo', fontName='Helvetica', fontSize=10, alignment=TA_RIGHT, textColor=colors.gray))
-    styles.add(ParagraphStyle(name='InvoiceDetails', fontName='Helvetica-Bold', fontSize=10, alignment=TA_RIGHT, textColor=colors.HexColor('#1a73e8')))
-    styles.add(ParagraphStyle(name='ClientHeader', fontName='Helvetica-Bold', fontSize=12, textColor=colors.black))
-    styles.add(ParagraphStyle(name='ClientInfo', fontName='Helvetica', fontSize=10, textColor=colors.black))
-    styles.add(ParagraphStyle(name='TableHeader', fontName='Helvetica-Bold', fontSize=9, alignment=TA_CENTER, textColor=colors.white))
-    styles.add(ParagraphStyle(name='TableData', fontName='Helvetica', fontSize=9, alignment=TA_CENTER, textColor=colors.black))
-    styles.add(ParagraphStyle(name='TableDataRight', fontName='Helvetica', fontSize=9, alignment=TA_RIGHT, textColor=colors.black))
-    styles.add(ParagraphStyle(name='TotalLabel', fontName='Helvetica-Bold', fontSize=10, alignment=TA_RIGHT, textColor=colors.black))
-    styles.add(ParagraphStyle(name='TotalValue', fontName='Helvetica-Bold', fontSize=12, alignment=TA_RIGHT, textColor=colors.HexColor('#1a73e8')))
-
     story = []
 
-    # --- 1. Invoice Header (Elite PDF Editor) ---
-    story.append(Paragraph("ELITE INVOICE", styles['InvoiceHeader']))
-    story.append(Spacer(1, 5*mm))
-
-    # --- 2. Company Info (Right Aligned) ---
-    story.append(Paragraph("Your Company Name Pvt. Ltd.", styles['CompanyInfo']))
-    story.append(Paragraph("123, Elite Street, Cyber City", styles['AddressInfo']))
-    story.append(Paragraph("Gandhinagar, Gujarat - 382007", styles['AddressInfo']))
-    story.append(Paragraph("GSTIN: 24ABCDE1234F1Z5", styles['AddressInfo']))
-    story.append(Paragraph("Email: info@elitepdf.com | Phone: +91 9876543210", styles['AddressInfo']))
-    story.append(Spacer(1, 10*mm))
-
-    # --- 3. Invoice Details (Date, Invoice No.) ---
-    invoice_num = invoice_data.get('invoice_number', 'INV-2023-001')
-    invoice_date = invoice_data.get('invoice_date', datetime.date.today().strftime("%d-%m-%Y"))
-    due_date = invoice_data.get('due_date', (datetime.date.today() + datetime.timedelta(days=7)).strftime("%d-%m-%Y"))
-
-    details_data = [
-        [Paragraph(f"<b>Invoice No:</b> {invoice_num}", styles['InvoiceDetails'])],
-        [Paragraph(f"<b>Invoice Date:</b> {invoice_date}", styles['InvoiceDetails'])],
-        [Paragraph(f"<b>Due Date:</b> {due_date}", styles['InvoiceDetails'])],
-    ]
-    details_table = Table(details_data, colWidths=[80*mm])
-    details_table.setStyle(TableStyle([
-        ('ALIGN', (0,0), (-1,-1), 'RIGHT'),
-        ('VALIGN', (0,0), (-1,-1), 'TOP'),
-        ('BOTTOMPADDING', (0,0), (-1,-1), 2*mm),
-    ]))
-    story.append(details_table)
-    story.append(Spacer(1, 5*mm))
-
-    # --- 4. Bill To / Client Details ---
-    story.append(Paragraph("Bill To:", styles['ClientHeader']))
-    story.append(Paragraph(invoice_data.get('client_name', "Client Name Inc."), styles['ClientInfo']))
-    story.append(Paragraph(invoice_data.get('client_address', "Client Address Line 1"), styles['ClientInfo']))
-    story.append(Paragraph(invoice_data.get('client_city_zip', "Client City, PIN-123456"), styles['ClientInfo']))
-    story.append(Paragraph(invoice_data.get('client_gstin', "Client GSTIN: XYZABC1234P1Z3"), styles['ClientInfo']))
-    story.append(Spacer(1, 15*mm))
-
-    # --- 5. Item Table ---
-    item_table_data = [
-        [
-            Paragraph("S.No.", styles['TableHeader']),
-            Paragraph("Description", styles['TableHeader']),
-            Paragraph("Qty", styles['TableHeader']),
-            Paragraph("Rate", styles['TableHeader']),
-            Paragraph("Amount", styles['TableHeader'])
-        ]
-    ]
+    # Logo & Header
+    if logo_file:
+        img = Image(logo_file, width=25*mm, height=25*mm)
+        story.append(img)
     
-    items = invoice_data.get('items', [])
-    subtotal = 0
-    for i, item in enumerate(items):
-        amount = item['qty'] * item['rate']
-        subtotal += amount
-        item_table_data.append([
-            Paragraph(str(i+1), styles['TableData']),
-            Paragraph(item['description'], styles['TableData']),
-            Paragraph(str(item['qty']), styles['TableData']),
-            Paragraph(f"₹ {item['rate']:.2f}", styles['TableDataRight']),
-            Paragraph(f"₹ {amount:.2f}", styles['TableDataRight'])
-        ])
-
-    item_table = Table(item_table_data, colWidths=[10*mm, 85*mm, 20*mm, 30*mm, 35*mm])
-    item_table.setStyle(TableStyle([
-        ('BACKGROUND', (0,0), (-1,0), colors.HexColor('#1a73e8')), # Header Background
-        ('TEXTCOLOR', (0,0), (-1,0), colors.white),
-        ('ALIGN', (0,0), (-1,-1), 'CENTER'),
-        ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
-        ('FONTNAME', (0,0), (-1,0), 'Helvetica-Bold'),
-        ('FONTSIZE', (0,0), (-1,0), 9),
-        ('BOTTOMPADDING', (0,0), (-1,0), 6),
-        ('GRID', (0,0), (-1,-1), 0.5, colors.HexColor('#cccccc')), # Table Borders
-        ('BOX', (0,0), (-1,-1), 0.5, colors.HexColor('#cccccc')),
-    ]))
-    story.append(item_table)
-    story.append(Spacer(1, 10*mm))
-
-    # --- 6. Totals Section ---
-    gst_rate = 0.18 # 18% GST
-    gst_amount = subtotal * gst_rate
-    total_amount = subtotal + gst_amount
-
-    totals_data = [
-        [Paragraph("Subtotal:", styles['TotalLabel']), Paragraph(f"₹ {subtotal:.2f}", styles['TableDataRight'])],
-        [Paragraph(f"GST ({gst_rate*100:.0f}%):", styles['TotalLabel']), Paragraph(f"₹ {gst_amount:.2f}", styles['TableDataRight'])],
-        [Paragraph("Total Amount:", styles['TotalValue']), Paragraph(f"₹ {total_amount:.2f}", styles['TotalValue'])],
-    ]
-    totals_table = Table(totals_data, colWidths=[120*mm, 50*mm])
-    totals_table.setStyle(TableStyle([
-        ('ALIGN', (0,0), (-1,-1), 'RIGHT'),
-        ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
-        ('BOTTOMPADDING', (0,0), (-1,-1), 2*mm),
-        ('TOPPADDING', (0,0), (-1,-1), 2*mm),
-        ('LEFTPADDING', (0,0), (-1,-1), 0),
-        ('RIGHTPADDING', (0,0), (-1,-1), 0),
-        ('GRID', (0,0), (-1,-1), 0.5, colors.HexColor('#cccccc')),
-        ('BOX', (0,0), (-1,-1), 0.5, colors.HexColor('#cccccc')),
-    ]))
-    story.append(totals_table)
-    story.append(Spacer(1, 15*mm))
-
-    # --- 7. Notes / Terms ---
-    story.append(Paragraph("<b>Terms & Conditions:</b>", styles['ClientHeader']))
-    story.append(Paragraph("1. Payment is due within 7 days of invoice date.", styles['ClientInfo']))
-    story.append(Paragraph("2. Late payments will incur a 2% monthly interest.", styles['ClientInfo']))
-    story.append(Spacer(1, 20*mm))
+    story.append(Paragraph(f"<b>{company_name}</b>", styles['Title']))
+    story.append(Paragraph(f"{company_addr}<br/>Mobile: {company_mob}", styles['Normal']))
+    story.append(Spacer(1, 10))
+    story.append(Paragraph("<hr/>", styles['Normal']))
     
-    # --- 8. Authorized Signature ---
-    story.append(Paragraph("For Your Company Name Pvt. Ltd.", styles['CompanyInfo']))
-    story.append(Spacer(1, 10*mm))
-    story.append(Paragraph("________________________", styles['CompanyInfo']))
-    story.append(Paragraph("(Authorized Signature)", styles['AddressInfo']))
+    # Invoice & Customer Info Table
+    info_data = [
+        [f"BILL TO: {cust_name}", f"Invoice No: {inv_no}"],
+        [f"Mobile: {cust_mob}", f"Date: {inv_date}"],
+        [f"Vehicle: {vehicle_no}", ""]
+    ]
+    info_table = Table(info_data, colWidths=[100*mm, 60*mm])
+    story.append(info_table)
+    story.append(Spacer(1, 15))
 
-
+    # Items Table
+    table_data = [["Description", "Qty", "Rate", "Amount"]]
+    total = 0
+    for item in st.session_state.items:
+        amt = item['qty'] * item['rate']
+        total += amt
+        table_data.append([item['desc'], str(item['qty']), f"{item['rate']:.2f}", f"{amt:.2f}"])
+    
+    table_data.append(["", "", "Total Amount:", f"Rs. {total:.2f}"])
+    
+    t = Table(table_data, colWidths=[80*mm, 20*mm, 30*mm, 30*mm])
+    t.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ('GRID', (0, 0), (-1, -2), 1, colors.black),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 10),
+    ]))
+    story.append(t)
+    
+    # Bank Details
+    story.append(Spacer(1, 20))
+    story.append(Paragraph(f"<b>Bank Details:</b>", styles['Normal']))
+    story.append(Paragraph(f"Bank: {bank_name} | A/c: {acc_no} | IFSC: {ifsc}", styles['Normal']))
+    
     doc.build(story)
+    return buffer.getvalue()
 
-# --- Example Usage ---
-if __name__ == "__main__":
-    example_invoice_data = {
-        "invoice_number": "INV-ELITE-2024-007",
-        "invoice_date": "22-07-2024",
-        "due_date": "29-07-2024",
-        "client_name": "Tech Solutions Hub",
-        "client_address": "456, Innovation Drive",
-        "client_city_zip": "Bengaluru, Karnataka - 560001",
-        "client_gstin": "29AABBCC1234D1Z6",
-        "items": [
-            {"description": "Web Development Services", "qty": 1, "rate": 25000.00},
-            {"description": "Monthly SEO Package", "qty": 2, "rate": 5000.00},
-            {"description": "Graphic Design Consultation", "qty": 1, "rate": 3000.00}
-        ]
-    }
-    generate_invoice("my_elite_invoice.pdf", example_invoice_data)
-    print("Elite Invoice generated: my_elite_invoice.pdf")
+# --- Download Button ---
+st.divider()
+if st.button("🚀 Generate & Download Invoice"):
+    pdf_out = generate_pdf()
+    st.download_button(label="📥 Download PDF", data=pdf_out, file_name=f"Invoice_{inv_no}.pdf", mime="application/pdf")
