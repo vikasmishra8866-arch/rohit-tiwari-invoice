@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Digital Seva Portal - Premium Hub</title>
+    <!-- Tailwind CSS for Premium Design -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome for Slick Icons (rel="stylesheet" fixed) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
@@ -25,6 +27,7 @@
             background-attachment: fixed;
         }
 
+        /* Glassmorphism Card Style */
         .premium-card {
             background: var(--card-bg);
             backdrop-filter: blur(16px);
@@ -40,6 +43,7 @@
             box-shadow: 0 20px 40px -15px rgba(0, 242, 255, 0.15);
         }
 
+        /* Hover Shiny Button Effect */
         .glow-button {
             position: relative;
             overflow: hidden;
@@ -65,19 +69,6 @@
         .glow-button:hover::before {
             left: 100%;
         }
-
-        .pulse-slow {
-            animation: pulse-glow 3s infinite;
-        }
-
-        @keyframes pulse-glow {
-            0%, 100% {
-                box-shadow: 0 0 15px rgba(0, 242, 255, 0.2);
-            }
-            50% {
-                box-shadow: 0 0 25px rgba(0, 242, 255, 0.4);
-            }
-        }
     </style>
 </head>
 <body class="text-slate-100 min-h-screen flex flex-col justify-between">
@@ -90,7 +81,7 @@
                     <i class="fa-solid fa-layer-group text-lg"></i>
                 </div>
                 <div>
-                    <span class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-cyan-400 via-sky-400 to-indigo-400 bg-clip-text text-transparent">
+                    <span class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-cyan-400 via-sky-400 to-indigo-400 bg-clip-text text-transparent text-uppercase">
                         VIKAS CYBER-PORTAL
                     </span>
                     <p class="text-[9px] text-slate-500 font-mono tracking-widest uppercase">Premium Service Gateway</p>
@@ -105,7 +96,7 @@
         </div>
     </nav>
 
-    <!-- Main Content Area -->
+    <!-- Main Dashboard -->
     <main class="max-w-7xl mx-auto px-6 py-12 flex-grow w-full">
         <header class="text-center mb-16">
             <div class="inline-flex items-center gap-2 px-3 py-1 bg-cyan-500/10 text-cyan-400 text-xs font-bold rounded-full border border-cyan-500/20 mb-4 uppercase tracking-wider">
@@ -119,7 +110,7 @@
             </p>
         </header>
 
-        <!-- Dynamic Grid of Services -->
+        <!-- Services Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             
             <!-- Card 1: Vehicle Details -->
@@ -202,7 +193,7 @@
                 </button>
             </div>
 
-            <!-- Card 6: Upcoming Utility Add-on -->
+            <!-- Card 6: Upcoming Utility Placeholder -->
             <div class="premium-card p-8 rounded-3xl flex flex-col justify-between border-dashed border-2 border-slate-800 bg-slate-950/20">
                 <div class="opacity-50">
                     <div class="w-14 h-14 rounded-2xl bg-slate-800 text-slate-500 flex items-center justify-center text-2xl mb-6 border border-slate-700">
@@ -226,20 +217,20 @@
         <p>© 2026 Vikas Cyber-Hub. All visual designs & references belong to official authorities.</p>
         <p class="mt-2 text-slate-600 text-xs">
             <span class="text-cyan-500 font-bold">⚡ Fast</span> • 
-            <span class="text-indigo-400 font-bold">🛡️ Secure Secure</span> • 
+            <span class="text-indigo-400 font-bold">🛡️ Secure</span> • 
             <span class="text-emerald-400 font-bold">🔒 Multi-Verified</span>
         </p>
     </footer>
 
     <script>
         function openService(url) {
-            // Screen dimensions and center calculations
+            // Calculated centering for the popup window
             const width = 1150;
             const height = 800;
             const left = (screen.width - width) / 2;
             const top = (screen.height - height) / 2;
             
-            // Open secure isolated custom pop-up layout
+            // Launch secure window with specific dimensions
             window.open(
                 url, 
                 '_blank', 
