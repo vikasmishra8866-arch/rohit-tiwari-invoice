@@ -1,117 +1,251 @@
-import streamlit as st
-from reportlab.lib.pagesizes import A4
-from reportlab.lib import colors
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, Image
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.lib.units import mm
-import io
-from datetime import date
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Seva Portal - Premium Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        
+        :root {
+            --neon-blue: #00f2ff;
+            --neon-purple: #7000ff;
+            --dark-bg: #090d16;
+            --card-bg: rgba(17, 24, 39, 0.7);
+        }
 
-# --- Page Setup ---
-st.set_page_config(page_title="Elite Invoice Generator", layout="wide")
-st.title("📑 Professional Sales Invoice Maker")
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--dark-bg);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(0, 242, 255, 0.07) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(112, 0, 255, 0.08) 0px, transparent 50%);
+            background-attachment: fixed;
+        }
 
-# --- Sidebar: Company & Logo ---
-with st.sidebar:
-    st.header("🏢 Your Company Details")
-    logo_file = st.file_uploader("Upload Company Logo", type=['jpg', 'png', 'jpeg'])
-    company_name = st.text_input("Company Name", "MG MOTORS")
-    company_addr = st.text_area("Address", "SHOP NO-1, NILKANTH VILLA, SURAT")
-    company_mob = st.text_input("Mobile", "8200575486")
-    
-    st.divider()
-    st.header("🏦 Bank Details")
-    bank_name = st.text_input("Bank Name", "Bank of Baroda")
-    acc_no = st.text_input("Account Number", "02810100054800")
-    ifsc = st.text_input("IFSC Code", "BARB0UDHNAX")
+        .premium-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
 
-# --- Main UI: Customer & Invoice Info ---
-col1, col2 = st.columns(2)
-with col1:
-    st.subheader("👤 Customer Details")
-    cust_name = st.text_input("Customer/Business Name", "AGARWAL ENTERPRISE")
-    cust_mob = st.text_input("Customer Mobile", "9998944200")
-    vehicle_no = st.text_input("Vehicle Number (Optional)", "GJ05BY9222")
+        .premium-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: rgba(0, 242, 255, 0.3);
+            box-shadow: 0 20px 40px -15px rgba(0, 242, 255, 0.15);
+        }
 
-with col2:
-    st.subheader("📄 Invoice Info")
-    inv_no = st.text_input("Invoice Number", "495")
-    inv_date = st.date_input("Invoice Date", date.today())
+        .glow-button {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
 
-# --- Items Table ---
-st.subheader("🛒 Items & Services")
-if 'items' not in st.session_state:
-    st.session_state.items = [{"desc": "", "qty": 1, "rate": 0.0}]
+        .glow-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                120deg,
+                transparent,
+                rgba(255, 255, 255, 0.2),
+                transparent
+            );
+            transition: all 0.6s ease;
+        }
 
-def add_item():
-    st.session_state.items.append({"desc": "", "qty": 1, "rate": 0.0})
+        .glow-button:hover::before {
+            left: 100%;
+        }
 
-for i, item in enumerate(st.session_state.items):
-    c1, c2, c3 = st.columns([3, 1, 1])
-    st.session_state.items[i]['desc'] = c1.text_input(f"Description {i+1}", item['desc'], key=f"desc_{i}")
-    st.session_state.items[i]['qty'] = c2.number_input(f"Qty {i+1}", min_value=1, value=item['qty'], key=f"qty_{i}")
-    st.session_state.items[i]['rate'] = c3.number_input(f"Rate {i+1}", min_value=0.0, value=item['rate'], key=f"rate_{i}")
+        .pulse-slow {
+            animation: pulse-glow 3s infinite;
+        }
 
-st.button("➕ Add More Item", on_click=add_item)
+        @keyframes pulse-glow {
+            0%, 100% {
+                box-shadow: 0 0 15px rgba(0, 242, 255, 0.2);
+            }
+            50% {
+                box-shadow: 0 0 25px rgba(0, 242, 255, 0.4);
+            }
+        }
+    </style>
+</head>
+<body class="text-slate-100 min-h-screen flex flex-col justify-between">
 
-# --- PDF Generation Logic ---
-def generate_pdf():
-    buffer = io.BytesIO()
-    doc = SimpleDocTemplate(buffer, pagesize=A4, rightMargin=30, leftMargin=30, topMargin=30, bottomMargin=30)
-    styles = getSampleStyleSheet()
-    story = []
+    <!-- Premium Navbar -->
+    <nav class="border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-md sticky top-0 z-50 px-6 py-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="bg-gradient-to-tr from-cyan-400 to-indigo-500 p-2.5 rounded-xl text-slate-950 font-bold shadow-lg shadow-cyan-500/10">
+                    <i class="fa-solid fa-layer-group text-lg"></i>
+                </div>
+                <div>
+                    <span class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-cyan-400 via-sky-400 to-indigo-400 bg-clip-text text-transparent">
+                        VIKAS CYBER-PORTAL
+                    </span>
+                    <p class="text-[9px] text-slate-500 font-mono tracking-widest uppercase">Premium Service Gateway</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-4 text-xs">
+                <span class="px-3 py-1.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-full font-semibold flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                    100% Secure Nodes
+                </span>
+            </div>
+        </div>
+    </nav>
 
-    # Logo & Header
-    if logo_file:
-        img = Image(logo_file, width=25*mm, height=25*mm)
-        story.append(img)
-    
-    story.append(Paragraph(f"<b>{company_name}</b>", styles['Title']))
-    story.append(Paragraph(f"{company_addr}<br/>Mobile: {company_mob}", styles['Normal']))
-    story.append(Spacer(1, 10))
-    story.append(Paragraph("<hr/>", styles['Normal']))
-    
-    # Invoice & Customer Info Table
-    info_data = [
-        [f"BILL TO: {cust_name}", f"Invoice No: {inv_no}"],
-        [f"Mobile: {cust_mob}", f"Date: {inv_date}"],
-        [f"Vehicle: {vehicle_no}", ""]
-    ]
-    info_table = Table(info_data, colWidths=[100*mm, 60*mm])
-    story.append(info_table)
-    story.append(Spacer(1, 15))
+    <!-- Main Content Area -->
+    <main class="max-w-7xl mx-auto px-6 py-12 flex-grow w-full">
+        <header class="text-center mb-16">
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-cyan-500/10 text-cyan-400 text-xs font-bold rounded-full border border-cyan-500/20 mb-4 uppercase tracking-wider">
+                <i class="fa-solid fa-sparkles"></i> Consolidated Solutions
+            </div>
+            <h1 class="text-4xl md:text-6xl font-black text-white mb-4 tracking-tight leading-none">
+                All-in-One <span class="bg-gradient-to-r from-cyan-400 to-indigo-500 bg-clip-text text-transparent">Digital Hub</span>
+            </h1>
+            <p class="text-slate-400 max-w-2xl mx-auto text-base md:text-lg font-light">
+                Baar-baar alag website dhoondhne ki koi tension nahi. Saari certified government aur daily utility ports ek hi clean workspace par.
+            </p>
+        </header>
 
-    # Items Table
-    table_data = [["Description", "Qty", "Rate", "Amount"]]
-    total = 0
-    for item in st.session_state.items:
-        amt = item['qty'] * item['rate']
-        total += amt
-        table_data.append([item['desc'], str(item['qty']), f"{item['rate']:.2f}", f"{amt:.2f}"])
-    
-    table_data.append(["", "", "Total Amount:", f"Rs. {total:.2f}"])
-    
-    t = Table(table_data, colWidths=[80*mm, 20*mm, 30*mm, 30*mm])
-    t.setStyle(TableStyle([
-        ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
-        ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
-        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-        ('GRID', (0, 0), (-1, -2), 1, colors.black),
-        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-        ('BOTTOMPADDING', (0, 0), (-1, -1), 10),
-    ]))
-    story.append(t)
-    
-    # Bank Details
-    story.append(Spacer(1, 20))
-    story.append(Paragraph(f"<b>Bank Details:</b>", styles['Normal']))
-    story.append(Paragraph(f"Bank: {bank_name} | A/c: {acc_no} | IFSC: {ifsc}", styles['Normal']))
-    
-    doc.build(story)
-    return buffer.getvalue()
+        <!-- Dynamic Grid of Services -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            
+            <!-- Card 1: Vehicle Details -->
+            <div class="premium-card p-8 rounded-3xl flex flex-col justify-between">
+                <div>
+                    <div class="w-14 h-14 rounded-2xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-2xl mb-6 border border-amber-500/20">
+                        <i class="fa-solid fa-car"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-3">Vehicle Details (Citizen Port)</h3>
+                    <p class="text-sm text-slate-400 mb-8 leading-relaxed">
+                        Official mParivahan system se direct connect hokar vehicle verification, owner name, aur fitness check karein.
+                    </p>
+                </div>
+                <button onclick="openService('https://vahan.parivahan.gov.in/nrservices/faces/user/citizen/citizenlogin.xhtml')" class="glow-button w-full bg-gradient-to-r from-amber-500/80 to-orange-600/80 hover:from-amber-400 hover:to-orange-500 text-slate-950 font-bold py-3.5 px-4 rounded-2xl transition duration-300 flex items-center justify-center gap-2 border border-amber-500/30 shadow-lg shadow-amber-500/10">
+                    Open Citizen Login <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+                </button>
+            </div>
 
-# --- Download Button ---
-st.divider()
-if st.button("🚀 Generate & Download Invoice"):
-    pdf_out = generate_pdf()
-    st.download_button(label="📥 Download PDF", data=pdf_out, file_name=f"Invoice_{inv_no}.pdf", mime="application/pdf")
+            <!-- Card 2: DGVCL Light Bill -->
+            <div class="premium-card p-8 rounded-3xl flex flex-col justify-between">
+                <div>
+                    <div class="w-14 h-14 rounded-2xl bg-sky-500/10 text-sky-400 flex items-center justify-center text-2xl mb-6 border border-sky-500/20">
+                        <i class="fa-solid fa-lightbulb"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-3">DGVCL Light Bill</h3>
+                    <p class="text-sm text-slate-400 mb-8 leading-relaxed">
+                        Apna consumer number enter karke turant electricity bill check karein aur live payment invoice status nikalyein.
+                    </p>
+                </div>
+                <button onclick="openService('https://bps.dgvcl.co.in/BillDetail/index.php')" class="glow-button w-full bg-gradient-to-r from-sky-500/80 to-blue-600/80 hover:from-sky-400 hover:to-blue-500 text-slate-950 font-bold py-3.5 px-4 rounded-2xl transition duration-300 flex items-center justify-center gap-2 border border-sky-500/30 shadow-lg shadow-sky-500/10">
+                    View & Pay Bill <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+                </button>
+            </div>
+
+            <!-- Card 3: Virtual Court Challan -->
+            <div class="premium-card p-8 rounded-3xl flex flex-col justify-between">
+                <div>
+                    <div class="w-14 h-14 rounded-2xl bg-rose-500/10 text-rose-400 flex items-center justify-center text-2xl mb-6 border border-rose-500/20">
+                        <i class="fa-solid fa-gavel"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-3">Virtual Court Challan</h3>
+                    <p class="text-sm text-slate-400 mb-8 leading-relaxed">
+                        Judicial e-court portals se traffic violations, summons aur court level online chalans ki live tracking aur disposal karein.
+                    </p>
+                </div>
+                <button onclick="openService('https://vcourts.gov.in/virtualcourt/')" class="glow-button w-full bg-gradient-to-r from-rose-500/80 to-red-600/80 hover:from-rose-400 hover:to-red-500 text-slate-950 font-bold py-3.5 px-4 rounded-2xl transition duration-300 flex items-center justify-center gap-2 border border-rose-500/30 shadow-lg shadow-rose-500/10">
+                    Open Virtual Court <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+                </button>
+            </div>
+
+            <!-- Card 4: PUC Download -->
+            <div class="premium-card p-8 rounded-3xl flex flex-col justify-between">
+                <div>
+                    <div class="w-14 h-14 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-2xl mb-6 border border-emerald-500/20">
+                        <i class="fa-solid fa-smog"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-3">PUC Certificate</h3>
+                    <p class="text-sm text-slate-400 mb-8 leading-relaxed">
+                        Pollution Under Control (PUC) module se vehicle validity check karein aur system generated certificate download karein.
+                    </p>
+                </div>
+                <button onclick="openService('https://puc.parivahan.gov.in/puc/views/PucCertificate.xhtml')" class="glow-button w-full bg-gradient-to-r from-emerald-500/80 to-teal-600/80 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-bold py-3.5 px-4 rounded-2xl transition duration-300 flex items-center justify-center gap-2 border border-emerald-500/30 shadow-lg shadow-emerald-500/10">
+                    Download PUC PDF <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+                </button>
+            </div>
+
+            <!-- Card 5: Regular Challan -->
+            <div class="premium-card p-8 rounded-3xl flex flex-col justify-between">
+                <div>
+                    <div class="w-14 h-14 rounded-2xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center text-2xl mb-6 border border-indigo-500/20">
+                        <i class="fa-solid fa-receipt"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-3">Regular Challan</h3>
+                    <p class="text-sm text-slate-400 mb-8 leading-relaxed">
+                        Direct Parivahan database se digital, spot ya camera generated speed tickets/challans check aur settle karein.
+                    </p>
+                </div>
+                <button onclick="openService('https://echallan.parivahan.gov.in/index/accused-challan')" class="glow-button w-full bg-gradient-to-r from-indigo-500/80 to-purple-600/80 hover:from-indigo-400 hover:to-purple-500 text-slate-950 font-bold py-3.5 px-4 rounded-2xl transition duration-300 flex items-center justify-center gap-2 border border-indigo-500/30 shadow-lg shadow-indigo-500/10">
+                    Check Active Challans <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+                </button>
+            </div>
+
+            <!-- Card 6: Upcoming Utility Add-on -->
+            <div class="premium-card p-8 rounded-3xl flex flex-col justify-between border-dashed border-2 border-slate-800 bg-slate-950/20">
+                <div class="opacity-50">
+                    <div class="w-14 h-14 rounded-2xl bg-slate-800 text-slate-500 flex items-center justify-center text-2xl mb-6 border border-slate-700">
+                        <i class="fa-solid fa-circle-plus"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-slate-300 mb-3">Naya Option</h3>
+                    <p class="text-sm text-slate-500 mb-8 leading-relaxed">
+                        Aap jo bhi naya portal batayenge, use hum log yahan agle update mein seamlessly link kar denge.
+                    </p>
+                </div>
+                <button disabled class="w-full bg-slate-900 text-slate-600 font-bold py-3.5 px-4 rounded-2xl border border-slate-800 cursor-not-allowed flex items-center justify-center gap-2">
+                    Coming Soon <i class="fa-solid fa-lock text-xs"></i>
+                </button>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800/80 bg-slate-950/40 py-8 text-center text-sm text-slate-500">
+        <p>© 2026 Vikas Cyber-Hub. All visual designs & references belong to official authorities.</p>
+        <p class="mt-2 text-slate-600 text-xs">
+            <span class="text-cyan-500 font-bold">⚡ Fast</span> • 
+            <span class="text-indigo-400 font-bold">🛡️ Secure Secure</span> • 
+            <span class="text-emerald-400 font-bold">🔒 Multi-Verified</span>
+        </p>
+    </footer>
+
+    <script>
+        function openService(url) {
+            // Screen dimensions and center calculations
+            const width = 1150;
+            const height = 800;
+            const left = (screen.width - width) / 2;
+            const top = (screen.height - height) / 2;
+            
+            // Open secure isolated custom pop-up layout
+            window.open(
+                url, 
+                '_blank', 
+                `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes,status=yes`
+            );
+        }
+    </script>
+</body>
+</html>
