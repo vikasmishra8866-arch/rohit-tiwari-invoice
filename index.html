@@ -4,8 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AGARWAL ENTERPRISE - Central Management Command</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- html2pdf.js for Client-Side PDF Generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet">
@@ -23,7 +28,6 @@
         }
     </script>
     <style>
-        /* custom smooth scroll and animations */
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
@@ -52,6 +56,7 @@
 </head>
 <body class="h-full text-slate-100 font-sans overflow-x-hidden antialiased">
 
+    <!-- ==================== SECTION 1: AUTHENTICATION MODULE ==================== -->
     <div id="auth-screen" class="min-h-screen flex items-center justify-center p-4 bg-radial from-slate-900 to-slate-950 relative overflow-hidden">
         <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-amber-500/10 rounded-full blur-[120px] pointer-events-none"></div>
         <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-yellow-600/10 rounded-full blur-[120px] pointer-events-none"></div>
@@ -123,8 +128,10 @@
         </div>
     </div>
 
+    <!-- ==================== SECTION 2: ENTERPRISE DASHBOARD ==================== -->
     <div id="main-dashboard" class="hidden h-screen flex flex-col md:flex-row overflow-hidden bg-slate-950">
         
+        <!-- 🧭 SIDEBAR COMPONENT -->
         <aside class="w-full md:w-80 bg-slate-950 border-b md:border-b-0 md:border-r border-slate-800/50 flex flex-col flex-shrink-0 z-20">
             <div class="p-6 border-b border-slate-800/50 flex items-center justify-between">
                 <div class="flex items-center gap-3">
@@ -145,6 +152,7 @@
                 <div>
                     <span class="px-3 text-[9px] uppercase font-black tracking-widest text-slate-600 block mb-3">Core Modules</span>
                     <nav class="space-y-1">
+                        <!-- PAWAN AUTO Accordion -->
                         <div class="rounded-xl overflow-hidden">
                             <button onclick="toggleSidebarAccordion('pawan-menu')" class="w-full flex items-center justify-between p-3.5 text-xs font-bold text-slate-400 hover:text-white hover:bg-slate-900/50 transition-all cursor-pointer">
                                 <span class="flex items-center gap-3">
@@ -166,6 +174,7 @@
                             </div>
                         </div>
 
+                        <!-- EMI COUNT Tab Switcher -->
                         <button onclick="switchTab('emi-count')" id="tab-btn-emi-count" class="w-full flex items-center justify-between p-3.5 text-xs font-bold text-slate-400 hover:text-white hover:bg-slate-900/50 transition-all rounded-xl cursor-pointer">
                             <span class="flex items-center gap-3">
                                 <i class="fa-solid fa-calculator text-amber-500"></i>
@@ -193,8 +202,10 @@
             </div>
         </aside>
 
+        <!-- 🖥️ MAIN CONTENT CONSOLE -->
         <main class="flex-grow flex flex-col overflow-hidden bg-slate-950 relative">
             
+            <!-- Header -->
             <header class="h-20 border-b border-slate-800/50 px-6 md:px-8 flex items-center justify-between flex-shrink-0 z-10 bg-slate-950/80 backdrop-blur-md">
                 <div class="flex items-center gap-4">
                     <h1 class="text-lg font-black tracking-wider text-white uppercase flex items-center gap-2">
@@ -203,6 +214,7 @@
                     </h1>
                 </div>
 
+                <!-- Clock -->
                 <div class="bg-slate-900 border border-slate-800/80 rounded-2xl px-4 py-2 shadow-inner">
                     <div class="flex items-center gap-3">
                         <div class="text-right">
@@ -216,8 +228,10 @@
                 </div>
             </header>
 
+            <!-- Workspace -->
             <div class="flex-grow overflow-y-auto p-6 md:p-8 relative">
                 
+                <!-- Welcome -->
                 <div id="panel-welcome" class="h-full flex flex-col items-center justify-center text-center max-w-lg mx-auto py-12">
                     <div class="w-16 h-16 bg-gradient-to-tr from-amber-500 to-yellow-600 text-slate-950 rounded-2xl flex items-center justify-center text-2xl font-black shadow-xl mb-6 animate-bounce">
                         <i class="fa-solid fa-network-wired"></i>
@@ -226,8 +240,8 @@
                     <p class="text-sm text-slate-400 mt-2 leading-relaxed">Pawan Auto Loan Data manage karne ya Advanced Loan/EMI Quotations structured calculate karne ke liye left sidebar navigation module options select karein.</p>
                 </div>
 
+                <!-- ==================== TAB PANEL: EMI COUNT MODULE ==================== -->
                 <div id="panel-emi-count" class="hidden space-y-6">
-                    
                     <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-slate-800/60 pb-5 gap-4">
                         <div>
                             <div class="inline-flex items-center gap-2 px-3 py-1 bg-amber-500/10 text-amber-400 text-[10px] font-black rounded-full border border-amber-500/20 mb-2 uppercase tracking-widest">
@@ -239,10 +253,9 @@
                     </div>
 
                     <div class="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start">
-                        
+                        <!-- Left Side Inputs Form -->
                         <div class="xl:col-span-6 space-y-4">
                             <div class="premium-glass p-6 rounded-3xl space-y-5 shadow-2xl relative overflow-hidden">
-                                
                                 <h3 class="text-sm font-black text-white uppercase tracking-wider flex items-center gap-2 border-b border-slate-800/80 pb-3">
                                     <i class="fa-solid fa-sliders text-amber-400"></i> Quotation Configuration
                                 </h3>
@@ -276,6 +289,7 @@
                                     </div>
                                 </div>
 
+                                <!-- Vehicle Inputs -->
                                 <div id="emi-vehicle-purchase-inputs" class="grid grid-cols-1 sm:grid-cols-2 gap-4 transition-all duration-300">
                                     <div>
                                         <label class="text-[9px] uppercase text-slate-500 font-black tracking-widest mb-1.5 block">Vehicle Gross Price (₹)</label>
@@ -295,6 +309,7 @@
                                     </div>
                                 </div>
 
+                                <!-- Loan Inputs -->
                                 <div id="emi-loan-inputs" class="grid grid-cols-1 sm:grid-cols-2 gap-4 hidden transition-all duration-300">
                                     <div>
                                         <label class="text-[9px] uppercase text-slate-500 font-black tracking-widest mb-1.5 block">Principal Loan Amount (₹)</label>
@@ -345,12 +360,12 @@
                             </div>
                         </div>
 
+                        <!-- Right Side Live Metrics Display -->
                         <div class="xl:col-span-6 flex flex-col h-full space-y-4">
                             <div class="premium-glass p-6 rounded-3xl flex-grow flex flex-col justify-between shadow-2xl relative min-h-[465px]">
-                                
                                 <div>
                                     <h3 class="text-sm font-black text-white uppercase tracking-wider flex items-center justify-between border-b border-slate-800/80 pb-3">
-                                        <span class="flex items-center gap-2"><i class="fa-solid fa-chart-pie text-slate-500" id="matrix-icon"></i> Live Repayment Matrix</span>
+                                        <span class="flex items-center gap-2"><i class="fa-solid fa-chart-pie text-slate-500"></i> Live Repayment Matrix</span>
                                         <span id="calculated-net-loan" class="text-xs font-mono text-amber-400 font-black bg-slate-950 px-3 py-1.5 rounded-xl border border-slate-900 shadow-inner">Net Principal: ₹0.00</span>
                                     </h3>
 
@@ -369,12 +384,12 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
 
             </div>
 
+            <!-- Footer -->
             <footer class="h-12 border-t border-slate-900/60 flex items-center justify-center bg-slate-950 flex-shrink-0 z-10 px-6">
                 <span class="text-[9px] uppercase font-black tracking-[0.2em] text-slate-600 font-mono">
                     © ALL RESERVED RIGHT <span class="text-slate-400">VIKAS MISHRA</span>
@@ -383,33 +398,31 @@
         </main>
     </div>
 
+    <!-- ==================== SYSTEM JAVASCRIPT CORE ==================== -->
     <script>
-        // ------------------ 🕒 REALTIME CLOCK MODULE ------------------
+        // --- 🕒 REALTIME CLOCK ---
         function initSystemClock() {
             const clockTime = document.getElementById('clock-time');
             const clockDate = document.getElementById('clock-date');
             
             setInterval(() => {
                 const now = new Date();
-                
-                // Format Date
                 const options = { day: '2-digit', month: 'short', year: 'numeric' };
                 clockDate.innerText = now.toLocaleDateString('en-IN', options).toUpperCase();
                 
-                // Format Time (HH:MM:SS AM/PM)
                 let hours = now.getHours();
                 const minutes = String(now.getMinutes()).padStart(2, '0');
                 const seconds = String(now.getSeconds()).padStart(2, '0');
                 const ampm = hours >= 12 ? 'PM' : 'AM';
                 hours = hours % 12;
-                hours = hours ? hours : 12; // 12 hours conversion
+                hours = hours ? hours : 12;
                 const formattedHours = String(hours).padStart(2, '0');
                 
                 clockTime.innerText = `${formattedHours}:${minutes}:${seconds} ${ampm}`;
             }, 1000);
         }
 
-        // ------------------ 🔑 AUTH SYSTEM & DATABASE ------------------
+        // --- 🔑 AUTH SYSTEM & DATABASE ---
         let currentUser = null;
 
         function getMockDatabase() {
@@ -446,7 +459,6 @@
             const pass = document.getElementById('reg-password').value;
             const secret = document.getElementById('reg-secret').value.trim();
 
-            // Secret key validation
             if (secret !== '9696') {
                 alert('🚨 ERROR: Critical Security Key Mismatch! Access Denied.');
                 return;
@@ -473,7 +485,6 @@
 
             const db = getMockDatabase();
             if (db[phone] && db[phone].password === pass) {
-                // Set Session
                 localStorage.setItem('ae_active_session', phone);
                 launchConsole(phone);
             } else {
@@ -503,7 +514,7 @@
             }
         }
 
-        // ------------------ 🧭 NAVIGATION LOGIC ------------------
+        // --- 🧭 NAVIGATION ---
         function toggleSidebarAccordion(id) {
             const pMenu = document.getElementById(id);
             const icon = document.getElementById('pawan-chevron');
@@ -517,24 +528,18 @@
         }
 
         function switchTab(tabId) {
-            // Remove active style from all navigation buttons
             document.getElementById('tab-btn-emi-count').classList.remove('sidebar-item-active');
-            
-            // Hide all panels
             document.getElementById('panel-welcome').classList.add('hidden');
             document.getElementById('panel-emi-count').classList.add('hidden');
 
             if (tabId === 'emi-count') {
                 document.getElementById('tab-btn-emi-count').classList.add('sidebar-item-active');
                 document.getElementById('panel-emi-count').classList.remove('hidden');
-                calculateEmiPreview(); // triggers calculation preview engine
+                calculateEmiPreview();
             }
         }
 
-
-        // =========================================================================
-        // 🧮 PAWAN AUTO FINANCE: DYNAMIC EMI ENGINE CORE LOGIC
-        // =========================================================================
+        // --- 🧮 EMI ENGINE CORE ---
         let currentEmiMode = 'vehicle';
         let currentInterestType = 'flat';
 
@@ -577,16 +582,18 @@
             calculateEmiPreview();
         }
 
+        // Shared calculation calculations
+        let emiResults = []; 
+        let finalPrincipal = 0;
+
         function calculateEmiPreview() {
             let principal = 0;
             
-            // Extract inputs values
             if (currentEmiMode === 'vehicle') {
                 const price = parseFloat(document.getElementById('emi-price').value) || 0;
                 const downPayment = parseFloat(document.getElementById('emi-down').value) || 0;
                 const fileCharges = parseFloat(document.getElementById('emi-file').value) || 0;
                 const otherCharges = parseFloat(document.getElementById('emi-other').value) || 0;
-                
                 principal = (price - downPayment) + fileCharges + otherCharges;
             } else {
                 const loanAmt = parseFloat(document.getElementById('emi-loan-amt').value) || 0;
@@ -596,11 +603,10 @@
                 const hpTerm = parseFloat(document.getElementById('emi-hp-term').value) || 0;
                 const hpAdd = parseFloat(document.getElementById('emi-hp-add').value) || 0;
                 const othCh = parseFloat(document.getElementById('emi-oth-ch').value) || 0;
-
                 principal = loanAmt + insCh + passCh + transCh + hpTerm + hpAdd + othCh;
             }
 
-            // Update principal label UI
+            finalPrincipal = principal;
             document.getElementById('calculated-net-loan').innerText = `Net Principal: ₹${principal.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
 
             const metricsGrid = document.getElementById('emi-metrics-grid');
@@ -611,12 +617,14 @@
                         Waiting for valid configuration parameters...
                     </div>
                 `;
+                emiResults = [];
                 return;
             }
 
             const annualRoi = parseFloat(document.getElementById('emi-roi').value) || 0;
             const tenures = [12, 18, 24, 36];
             let htmlGridContent = '';
+            emiResults = [];
 
             tenures.forEach(months => {
                 let monthlyEmi = 0;
@@ -640,6 +648,13 @@
                         totalInterest = 0;
                     }
                 }
+
+                emiResults.push({
+                    months,
+                    monthlyEmi: Math.round(monthlyEmi),
+                    totalInterest: Math.round(totalInterest),
+                    totalRepay: Math.round(totalRepay)
+                });
 
                 htmlGridContent += `
                     <div class="bg-slate-900/40 p-4 rounded-2xl flex flex-col justify-between border border-slate-800/80 hover:border-amber-500/30 transition-all">
@@ -668,16 +683,151 @@
             metricsGrid.innerHTML = htmlGridContent;
         }
 
-        // --- PDF generation mock & custom system printing template ---
+        // ==================== 📄 PREMIUM CLIENT SIDE PDF EXPORT ENGINE ====================
         function generateQuotationPDF() {
-            const customer = document.getElementById('emi-cust-name').value || 'VALUED CUSTOMER';
-            const vehicle = document.getElementById('emi-veh-name').value || 'SPECIFIED VEHICLE';
+            if (finalPrincipal <= 0 || emiResults.length === 0) {
+                alert("🚫 Error: Calculation table table is empty! Value fill karke try karein.");
+                return;
+            }
+
+            const customer = (document.getElementById('emi-cust-name').value || 'VALUED CUSTOMER').toUpperCase();
+            const vehicle = (document.getElementById('emi-veh-name').value || 'STANDARD MOTOR ASSET').toUpperCase();
+            const roi = document.getElementById('emi-roi').value || '18.0';
+            const timestamp = new Date().toLocaleString('en-IN');
+
+            // Virtual invoice content structure built elegantly for clean PDF generation
+            const element = document.createElement('div');
+            element.className = 'p-10 bg-white text-slate-900 font-sans';
+            element.style.width = '790px'; // Exact width for flawless A4 scaling
             
-            alert(`⚡ Preparing Quotation Record... \n\nClient Name: "${customer.toUpperCase()}" \nVehicle Asset: "${vehicle.toUpperCase()}". \n\nOpening System Print Template!`);
-            window.print();
+            let itemsDetailsHtml = '';
+            if (currentEmiMode === 'vehicle') {
+                itemsDetailsHtml = `
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span style="color: #64748b;">Vehicle Gross Price:</span>
+                        <span style="font-weight: bold;">₹${parseFloat(document.getElementById('emi-price').value || 0).toLocaleString('en-IN')}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span style="color: #64748b;">Down Payment:</span>
+                        <span style="font-weight: bold; color: #b45309;">- ₹${parseFloat(document.getElementById('emi-down').value || 0).toLocaleString('en-IN')}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span style="color: #64748b;">File Charges:</span>
+                        <span style="font-weight: bold;">₹${parseFloat(document.getElementById('emi-file').value || 0).toLocaleString('en-IN')}</span>
+                    </div>
+                `;
+            } else {
+                itemsDetailsHtml = `
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span style="color: #64748b;">Loan Capital:</span>
+                        <span style="font-weight: bold;">₹${parseFloat(document.getElementById('emi-loan-amt').value || 0).toLocaleString('en-IN')}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span style="color: #64748b;">Insurance Charge:</span>
+                        <span style="font-weight: bold;">₹${parseFloat(document.getElementById('emi-ins-ch').value || 0).toLocaleString('en-IN')}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span style="color: #64748b;">RTO Passing Charge:</span>
+                        <span style="font-weight: bold;">₹${parseFloat(document.getElementById('emi-pass-ch').value || 0).toLocaleString('en-IN')}</span>
+                    </div>
+                `;
+            }
+
+            let matrixRowsHtml = '';
+            emiResults.forEach(item => {
+                matrixRowsHtml += `
+                    <tr style="border-bottom: 1px solid #e2e8f0; text-align: left;">
+                        <td style="padding: 12px; font-weight: 800; color: #1e293b;">${item.months} Months</td>
+                        <td style="padding: 12px; font-weight: bold; color: #b45309;">₹${item.monthlyEmi.toLocaleString('en-IN')}</td>
+                        <td style="padding: 12px; color: #475569;">₹${item.totalInterest.toLocaleString('en-IN')}</td>
+                        <td style="padding: 12px; font-weight: bold; color: #1e293b;">₹${item.totalRepay.toLocaleString('en-IN')}</td>
+                    </tr>
+                `;
+            });
+
+            element.innerHTML = `
+                <!-- Invoice Header -->
+                <div style="border-bottom: 3px solid #eab308; padding-bottom: 20px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <h1 style="font-size: 24px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; margin: 0; color: #0f172a;">AGARWAL ENTERPRISE</h1>
+                        <p style="font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #64748b; margin: 4px 0 0 0;">PAWAN AUTO MOTOR FINANCE SYSTEM</p>
+                    </div>
+                    <div style="text-align: right;">
+                        <span style="font-size: 11px; font-weight: bold; padding: 4px 10px; background-color: #fef9c3; color: #a16207; border-radius: 6px; border: 1px solid #fef08a;">FINANCE QUOTATION</span>
+                        <p style="font-size: 10px; color: #64748b; margin: 8px 0 0 0; font-family: monospace;">Date: ${timestamp}</p>
+                    </div>
+                </div>
+
+                <!-- Customer Details Grid -->
+                <div style="display: grid; grid-template-cols: 1fr 1fr; gap: 20px; background-color: #f8fafc; border-radius: 12px; padding: 15px; margin-bottom: 25px; border: 1px solid #f1f5f9;">
+                    <div>
+                        <span style="font-size: 9px; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px;">CLIENT INTERESTEE</span>
+                        <h3 style="font-size: 14px; font-weight: 800; color: #1e293b; margin: 4px 0;">${customer}</h3>
+                        <p style="font-size: 11px; color: #64748b; margin: 0;">Asset: <strong style="color: #475569;">${vehicle}</strong></p>
+                    </div>
+                    <div style="text-align: right;">
+                        <span style="font-size: 9px; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px;">ALGORITHM CRITERIA</span>
+                        <h3 style="font-size: 14px; font-weight: 800; color: #1e293b; margin: 4px 0; text-transform: uppercase;">${currentInterestType} Rate</h3>
+                        <p style="font-size: 11px; color: #64748b; margin: 0;">Annual ROI Interest: <strong>${roi}%</strong></p>
+                    </div>
+                </div>
+
+                <!-- Calculations Breakdown -->
+                <div style="margin-bottom: 25px;">
+                    <h4 style="font-size: 11px; font-weight: 900; color: #0f172a; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px;">Capital Configuration Overview</h4>
+                    <div style="font-size: 11px; font-family: sans-serif; max-width: 400px;">
+                        ${itemsDetailsHtml}
+                        <div style="display: flex; justify-content: space-between; margin-top: 10px; padding-top: 10px; border-top: 2px dashed #cbd5e1; font-weight: 800; font-size: 12px; color: #0f172a;">
+                            <span>Net Calculated Principal:</span>
+                            <span>₹${finalPrincipal.toLocaleString('en-IN', {minimumFractionDigits: 2})}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Matrix Table -->
+                <div>
+                    <h4 style="font-size: 11px; font-weight: 900; color: #0f172a; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px;">Structured Installments Repayment Matrix</h4>
+                    <table style="width: 100%; font-size: 12px; border-collapse: collapse; margin-top: 10px;">
+                        <thead>
+                            <tr style="background-color: #0f172a; color: #ffffff; text-align: left;">
+                                <th style="padding: 10px; border-top-left-radius: 8px;">Tenure</th>
+                                <th style="padding: 10px;">Monthly EMI</th>
+                                <th style="padding: 10px;">Total Interest Charged</th>
+                                <th style="padding: 10px; border-top-right-radius: 8px;">Total Gross Repay</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${matrixRowsHtml}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Footer Signatures -->
+                <div style="margin-top: 50px; display: flex; justify-content: space-between; align-items: flex-end;">
+                    <div>
+                        <p style="font-size: 9px; color: #94a3b8; margin: 0;">This is an automated system generated quotation index.</p>
+                        <p style="font-size: 9px; font-weight: bold; color: #475569; margin: 4px 0 0 0;">© ALL RESERVED RIGHT VIKAS MISHRA</p>
+                    </div>
+                    <div style="text-align: right; width: 180px;">
+                        <div style="border-bottom: 1px solid #94a3b8; height: 35px;"></div>
+                        <p style="font-size: 10px; font-weight: 800; color: #0f172a; margin: 6px 0 0 0; uppercase">AGARWAL AUTHORIZED SIGN</p>
+                    </div>
+                </div>
+            `;
+
+            // HTML2PDF options configuration for flawless high-resolution downloads
+            const opt = {
+                margin:       15,
+                filename:     `AGARWAL_Quotation_${customer.replace(/\s+/g, '_')}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, logging: false, useCORS: true },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            // Start PDF compilation & trigger instant download
+            html2pdf().from(element).set(opt).save();
         }
 
-        // Initialize session checks on page load
         window.onload = function() {
             checkExistingSession();
         };
