@@ -1,298 +1,686 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en" class="h-full bg-slate-950 selection:bg-amber-500 selection:text-slate-950">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Digital Seva Portal - Premium Hub</title>
-    <!-- Tailwind CSS for Premium Design -->
+    <title>AGARWAL ENTERPRISE - Central Management Command</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome for Slick Icons (rel="stylesheet" fixed) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
-        
-        :root {
-            --neon-blue: #00f2ff;
-            --neon-purple: #7000ff;
-            --dark-bg: #090d16;
-            --card-bg: rgba(17, 24, 39, 0.7);
+        /* custom smooth scroll and animations */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
         }
-
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: var(--dark-bg);
-            background-image: 
-                radial-gradient(at 0% 0%, rgba(0, 242, 255, 0.07) 0px, transparent 50%),
-                radial-gradient(at 100% 100%, rgba(112, 0, 255, 0.08) 0px, transparent 50%);
-            background-attachment: fixed;
+        ::-webkit-scrollbar-track {
+            background: #020617;
         }
-
-        /* Glassmorphism Card Style */
-        .premium-card {
-            background: var(--card-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 9999px;
         }
-
-        .premium-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            border-color: rgba(0, 242, 255, 0.3);
-            box-shadow: 0 20px 40px -15px rgba(0, 242, 255, 0.15);
+        ::-webkit-scrollbar-thumb:hover {
+            background: #eab308;
         }
-
-        /* Hover Shiny Button Effect */
-        .glow-button {
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
+        .premium-glass {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.4) 0%, rgba(2, 6, 23, 0.8) 100%);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(51, 65, 85, 0.3);
         }
-
-        .glow-button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                120deg,
-                transparent,
-                rgba(255, 255, 255, 0.2),
-                transparent
-            );
-            transition: all 0.6s ease;
-        }
-
-        .glow-button:hover::before {
-            left: 100%;
+        .sidebar-item-active {
+            background: linear-gradient(90deg, rgba(234, 179, 8, 0.1) 0%, rgba(234, 179, 8, 0.01) 100%);
+            border-left: 3px solid #eab308;
+            color: #ffffff;
         }
     </style>
 </head>
-<body class="text-slate-100 min-h-screen flex flex-col justify-between">
+<body class="h-full text-slate-100 font-sans overflow-x-hidden antialiased">
 
-    <!-- Premium Navbar -->
-    <nav class="border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-md sticky top-0 z-50 px-6 py-4">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <div class="bg-gradient-to-tr from-cyan-400 to-indigo-500 p-2.5 rounded-xl text-slate-950 font-bold shadow-lg shadow-cyan-500/10">
-                    <i class="fa-solid fa-layer-group text-lg"></i>
+    <div id="auth-screen" class="min-h-screen flex items-center justify-center p-4 bg-radial from-slate-900 to-slate-950 relative overflow-hidden">
+        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-amber-500/10 rounded-full blur-[120px] pointer-events-none"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-yellow-600/10 rounded-full blur-[120px] pointer-events-none"></div>
+
+        <div class="w-full max-w-md premium-glass p-8 rounded-3xl shadow-2xl relative z-10">
+            <div class="text-center mb-8">
+                <div class="inline-flex items-center justify-center w-14 h-14 bg-amber-500/10 border border-amber-500/30 rounded-2xl mb-3 text-amber-400 text-2xl shadow-lg">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <h1 class="text-2xl font-extrabold tracking-tight text-white uppercase">Agarwal Enterprise</h1>
+                <p class="text-xs text-slate-400 mt-1">Authorized Access Secure Terminal Control Unit</p>
+            </div>
+
+            <div class="flex bg-slate-950 p-1.5 rounded-2xl border border-slate-900 mb-6">
+                <button onclick="toggleAuthTab('login')" id="tab-login" class="flex-1 py-2.5 text-xs font-black rounded-xl transition-all bg-amber-500 text-slate-950 shadow-md cursor-pointer">
+                    <i class="fa-solid fa-lock mr-1.5"></i> Secure Login
+                </button>
+                <button onclick="toggleAuthTab('register')" id="tab-register" class="flex-1 py-2.5 text-xs font-black rounded-xl transition-all text-slate-400 hover:text-white cursor-pointer">
+                    <i class="fa-solid fa-user-plus mr-1.5"></i> Register Account
+                </button>
+            </div>
+
+            <form id="login-form" onsubmit="handleLogin(event)" class="space-y-4">
+                <div>
+                    <label class="text-[10px] uppercase text-slate-500 font-bold tracking-wider mb-1.5 block">Mobile Number</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-phone absolute left-3.5 top-3.5 text-xs text-slate-600"></i>
+                        <input type="tel" id="login-phone" required placeholder="Enter mobile number" class="w-full bg-slate-950/80 border border-slate-800/80 rounded-xl pl-9 pr-4 py-3 text-sm text-white outline-none focus:border-amber-500 font-mono tracking-wide transition-all shadow-inner">
+                    </div>
                 </div>
                 <div>
-                    <span class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-cyan-400 via-sky-400 to-indigo-400 bg-clip-text text-transparent text-uppercase">
-                        VIKAS CYBER-PORTAL
-                    </span>
-                    <p class="text-[9px] text-slate-500 font-mono tracking-widest uppercase">Premium Service Gateway</p>
+                    <label class="text-[10px] uppercase text-slate-500 font-bold tracking-wider mb-1.5 block">Password</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-key absolute left-3.5 top-3.5 text-xs text-slate-600"></i>
+                        <input type="password" id="login-password" required placeholder="••••••••" class="w-full bg-slate-950/80 border border-slate-800/80 rounded-xl pl-9 pr-4 py-3 text-sm text-white outline-none focus:border-amber-500 font-mono tracking-wide transition-all shadow-inner">
+                    </div>
+                </div>
+                <button type="submit" class="w-full bg-gradient-to-r from-amber-500 to-yellow-600 hover:brightness-110 text-slate-950 font-black py-3.5 rounded-xl transition-all shadow-xl shadow-amber-500/10 uppercase tracking-widest text-xs cursor-pointer mt-2">
+                    Access Dashboard <i class="fa-solid fa-arrow-right-to-bracket ml-1.5"></i>
+                </button>
+            </form>
+
+            <form id="register-form" onsubmit="handleRegister(event)" class="space-y-4 hidden">
+                <div>
+                    <label class="text-[10px] uppercase text-slate-500 font-bold tracking-wider mb-1.5 block">Mobile Number</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-phone absolute left-3.5 top-3.5 text-xs text-slate-600"></i>
+                        <input type="tel" id="reg-phone" required placeholder="Enter mobile number" class="w-full bg-slate-950/80 border border-slate-800/80 rounded-xl pl-9 pr-4 py-3 text-sm text-white outline-none focus:border-amber-500 font-mono tracking-wide transition-all shadow-inner">
+                    </div>
+                </div>
+                <div>
+                    <label class="text-[10px] uppercase text-slate-500 font-bold tracking-wider mb-1.5 block">Choose Password</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-key absolute left-3.5 top-3.5 text-xs text-slate-600"></i>
+                        <input type="password" id="reg-password" required placeholder="••••••••" class="w-full bg-slate-950/80 border border-slate-800/80 rounded-xl pl-9 pr-4 py-3 text-sm text-white outline-none focus:border-amber-500 font-mono tracking-wide transition-all shadow-inner">
+                    </div>
+                </div>
+                <div>
+                    <label class="text-[10px] uppercase text-amber-500 font-black tracking-widest mb-1.5 block">Security Secret Key (Mandatory)</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-shield-halved absolute left-3.5 top-3.5 text-xs text-amber-500"></i>
+                        <input type="password" id="reg-secret" required placeholder="Enter Secret Key" class="w-full bg-slate-950/80 border border-amber-500/30 focus:border-amber-500 rounded-xl pl-9 pr-4 py-3 text-sm text-amber-400 outline-none font-mono tracking-widest transition-all shadow-inner">
+                    </div>
+                </div>
+                <button type="submit" class="w-full bg-gradient-to-r from-amber-500 to-yellow-600 hover:brightness-110 text-slate-950 font-black py-3.5 rounded-xl transition-all shadow-xl shadow-amber-500/10 uppercase tracking-widest text-xs cursor-pointer mt-2">
+                    Validate & Create Account <i class="fa-solid fa-user-plus ml-1.5"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div id="main-dashboard" class="hidden h-screen flex flex-col md:flex-row overflow-hidden bg-slate-950">
+        
+        <aside class="w-full md:w-80 bg-slate-950 border-b md:border-b-0 md:border-r border-slate-800/50 flex flex-col flex-shrink-0 z-20">
+            <div class="p-6 border-b border-slate-800/50 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-amber-500/10 border border-amber-500/20 rounded-xl flex items-center justify-center text-amber-500">
+                        <i class="fa-solid fa-cube text-lg"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-sm font-black text-white tracking-wider uppercase">AGARWAL ENT.</h2>
+                        <span class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Operator Console</span>
+                    </div>
+                </div>
+                <button onclick="handleLogout()" class="text-slate-500 hover:text-rose-500 transition-colors p-2 rounded-lg hover:bg-slate-900 cursor-pointer" title="Disconnect Session">
+                    <i class="fa-solid fa-power-off"></i>
+                </button>
+            </div>
+
+            <div class="flex-grow p-4 space-y-6 overflow-y-auto">
+                <div>
+                    <span class="px-3 text-[9px] uppercase font-black tracking-widest text-slate-600 block mb-3">Core Modules</span>
+                    <nav class="space-y-1">
+                        <div class="rounded-xl overflow-hidden">
+                            <button onclick="toggleSidebarAccordion('pawan-menu')" class="w-full flex items-center justify-between p-3.5 text-xs font-bold text-slate-400 hover:text-white hover:bg-slate-900/50 transition-all cursor-pointer">
+                                <span class="flex items-center gap-3">
+                                    <i class="fa-solid fa-car-side text-amber-500"></i>
+                                    <span>PAWAN AUTO</span>
+                                </span>
+                                <i id="pawan-chevron" class="fa-solid fa-chevron-down text-[10px] text-slate-600 transition-transform duration-300"></i>
+                            </button>
+                            <div id="pawan-menu" class="hidden bg-slate-900/30 border-t border-slate-900 p-3 space-y-3">
+                                <div class="bg-slate-950/80 border border-slate-900 rounded-xl p-3">
+                                    <h4 class="text-[10px] uppercase font-black text-slate-500 tracking-wider flex items-center gap-1.5 mb-1">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> Office Loan Data
+                                    </h4>
+                                    <p class="text-[10px] text-slate-400 leading-relaxed">Centralized credit records management system.</p>
+                                </div>
+                                <a href="https://pawanauto.tapandtype.com/login.php" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-black py-3 px-4 rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-amber-500/5 text-xs text-center">
+                                    <i class="fa-solid fa-arrow-up-right-from-square"></i> Open Loan Portal
+                                </a>
+                            </div>
+                        </div>
+
+                        <button onclick="switchTab('emi-count')" id="tab-btn-emi-count" class="w-full flex items-center justify-between p-3.5 text-xs font-bold text-slate-400 hover:text-white hover:bg-slate-900/50 transition-all rounded-xl cursor-pointer">
+                            <span class="flex items-center gap-3">
+                                <i class="fa-solid fa-calculator text-amber-500"></i>
+                                <span>EMI COUNT ENGINE</span>
+                            </span>
+                            <i class="fa-solid fa-chevron-right text-[10px] text-slate-600"></i>
+                        </button>
+                    </nav>
                 </div>
             </div>
-            <div class="flex items-center gap-4 text-xs">
-                <span class="px-3 py-1.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-full font-semibold flex items-center gap-1.5">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                    100% Secure Nodes
-                </span>
-            </div>
-        </div>
-    </nav>
 
-    <!-- Main Dashboard -->
-    <main class="max-w-7xl mx-auto px-6 py-12 flex-grow w-full">
-        <header class="text-center mb-16">
-            <div class="inline-flex items-center gap-2 px-3 py-1 bg-cyan-500/10 text-cyan-400 text-xs font-bold rounded-full border border-cyan-500/20 mb-4 uppercase tracking-wider">
-                <i class="fa-solid fa-sparkles"></i> Consolidated Solutions
+            <div class="p-4 border-t border-slate-800/50 bg-slate-900/10">
+                <div class="bg-slate-950/80 border border-slate-800 p-3 rounded-2xl flex items-center gap-3">
+                    <div class="relative">
+                        <div class="w-9 h-9 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center text-amber-500 font-bold text-sm">
+                            AE
+                        </div>
+                        <span class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 border-2 border-slate-950 rounded-full animate-pulse"></span>
+                    </div>
+                    <div>
+                        <p class="text-[11px] font-black text-white" id="operator-phone">0000000000</p>
+                        <p class="text-[9px] text-emerald-500 font-bold uppercase tracking-wider">Secure Session Active</p>
+                    </div>
+                </div>
             </div>
-            <h1 class="text-4xl md:text-6xl font-black text-white mb-4 tracking-tight leading-none">
-                All-in-One <span class="bg-gradient-to-r from-cyan-400 to-indigo-500 bg-clip-text text-transparent">Digital Hub</span>
-            </h1>
-            <p class="text-slate-400 max-w-2xl mx-auto text-base md:text-lg font-light">
-                Baar-baar alag website dhoondhne ki koi tension nahi. Saari certified government aur daily utility ports ek hi clean workspace par.
-            </p>
-        </header>
+        </aside>
 
-        <!-- Services Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <main class="flex-grow flex flex-col overflow-hidden bg-slate-950 relative">
             
-            <!-- Card 1: Vehicle Details -->
-            <div class="premium-card p-8 rounded-3xl flex flex-col justify-between">
-                <div>
-                    <div class="w-14 h-14 rounded-2xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-2xl mb-6 border border-amber-500/20">
-                        <i class="fa-solid fa-car"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold text-white mb-3">Vehicle Details (Citizen Port)</h3>
-                    <p class="text-sm text-slate-400 mb-8 leading-relaxed">
-                        Official mParivahan system se direct connect hokar vehicle verification, owner name, aur fitness check karein.
-                    </p>
+            <header class="h-20 border-b border-slate-800/50 px-6 md:px-8 flex items-center justify-between flex-shrink-0 z-10 bg-slate-950/80 backdrop-blur-md">
+                <div class="flex items-center gap-4">
+                    <h1 class="text-lg font-black tracking-wider text-white uppercase flex items-center gap-2">
+                        Agarwal Enterprise
+                        <span class="hidden md:inline-flex px-2.5 py-0.5 bg-slate-900 text-amber-400 rounded-md text-[9px] font-black border border-slate-800 uppercase tracking-widest">PRO CONSOLE</span>
+                    </h1>
                 </div>
-                <button onclick="openService('https://vahan.parivahan.gov.in/nrservices/faces/user/citizen/citizenlogin.xhtml', 'VehiclePortal')" class="glow-button w-full bg-gradient-to-r from-amber-500/80 to-orange-600/80 hover:from-amber-400 hover:to-orange-500 text-slate-950 font-bold py-3.5 px-4 rounded-2xl transition duration-300 flex items-center justify-center gap-2 border border-amber-500/30 shadow-lg shadow-amber-500/10">
-                    Open Citizen Login <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
-                </button>
+
+                <div class="bg-slate-900 border border-slate-800/80 rounded-2xl px-4 py-2 shadow-inner">
+                    <div class="flex items-center gap-3">
+                        <div class="text-right">
+                            <div class="text-[9px] font-black uppercase tracking-widest text-slate-500" id="clock-date">LOADING DATE...</div>
+                            <div class="text-sm font-black text-amber-400 font-mono tracking-wider mt-0.5" id="clock-time">00:00:00 AM</div>
+                        </div>
+                        <div class="w-1.5 h-7 bg-amber-500/20 rounded-full overflow-hidden">
+                            <div class="w-full bg-amber-500 animate-ping h-full"></div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="flex-grow overflow-y-auto p-6 md:p-8 relative">
+                
+                <div id="panel-welcome" class="h-full flex flex-col items-center justify-center text-center max-w-lg mx-auto py-12">
+                    <div class="w-16 h-16 bg-gradient-to-tr from-amber-500 to-yellow-600 text-slate-950 rounded-2xl flex items-center justify-center text-2xl font-black shadow-xl mb-6 animate-bounce">
+                        <i class="fa-solid fa-network-wired"></i>
+                    </div>
+                    <h2 class="text-2xl font-extrabold text-white">Central Operations Interface Ready</h2>
+                    <p class="text-sm text-slate-400 mt-2 leading-relaxed">Pawan Auto Loan Data manage karne ya Advanced Loan/EMI Quotations structured calculate karne ke liye left sidebar navigation module options select karein.</p>
+                </div>
+
+                <div id="panel-emi-count" class="hidden space-y-6">
+                    
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-slate-800/60 pb-5 gap-4">
+                        <div>
+                            <div class="inline-flex items-center gap-2 px-3 py-1 bg-amber-500/10 text-amber-400 text-[10px] font-black rounded-full border border-amber-500/20 mb-2 uppercase tracking-widest">
+                                <i class="fa-solid fa-landmark"></i> Pawan Auto Finance
+                            </div>
+                            <h2 class="text-2xl font-black text-white tracking-tight">EMI Quotation Generator</h2>
+                            <p class="text-slate-400 text-xs mt-1 font-medium">Vehicle purchase structural details configure karein aur dynamic estimation metrics instantly print karein.</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start">
+                        
+                        <div class="xl:col-span-6 space-y-4">
+                            <div class="premium-glass p-6 rounded-3xl space-y-5 shadow-2xl relative overflow-hidden">
+                                
+                                <h3 class="text-sm font-black text-white uppercase tracking-wider flex items-center gap-2 border-b border-slate-800/80 pb-3">
+                                    <i class="fa-solid fa-sliders text-amber-400"></i> Quotation Configuration
+                                </h3>
+
+                                <div>
+                                    <label class="text-[9px] uppercase text-slate-500 font-black tracking-widest mb-2 block">Quotation Operations Mode</label>
+                                    <div class="flex bg-slate-950 p-1 rounded-xl border border-slate-900">
+                                        <button type="button" onclick="setEmiMode('vehicle')" id="mode-btn-vehicle" class="flex-1 py-2 text-xs font-black rounded-lg transition-all bg-amber-500 text-slate-950 shadow-md cursor-pointer">
+                                            <i class="fa-solid fa-car-side mr-1"></i> Vehicle Purchase
+                                        </button>
+                                        <button type="button" onclick="setEmiMode('loan')" id="mode-btn-loan" class="flex-1 py-2 text-xs font-black rounded-lg transition-all text-slate-500 hover:text-slate-300 cursor-pointer">
+                                            <i class="fa-solid fa-hand-holding-dollar mr-1"></i> Loan on Vehicle
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="text-[9px] uppercase text-slate-500 font-black tracking-widest mb-1.5 block">Customer Name</label>
+                                        <div class="relative">
+                                            <i class="fa-solid fa-user absolute left-3.5 top-3.5 text-xs text-slate-600"></i>
+                                            <input type="text" id="emi-cust-name" oninput="calculateEmiPreview()" placeholder="VIKAS KUMAR MISHRA" class="w-full bg-slate-950/80 border border-slate-800/80 rounded-xl pl-9 pr-3 py-3 text-xs text-amber-400 outline-none focus:border-amber-500 font-mono tracking-wide font-bold transition-all shadow-inner">
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="text-[9px] uppercase text-slate-500 font-black tracking-widest mb-1.5 block">Vehicle Portfolio Name</label>
+                                        <div class="relative">
+                                            <i class="fa-solid fa-truck-monster absolute left-3.5 top-3.5 text-xs text-slate-600"></i>
+                                            <input type="text" id="emi-veh-name" oninput="calculateEmiPreview()" placeholder="PIAGGIO / APE BHARAT" class="w-full bg-slate-950/80 border border-slate-800/80 rounded-xl pl-9 pr-3 py-3 text-xs text-amber-400 outline-none focus:border-amber-500 font-mono tracking-wide font-bold transition-all shadow-inner">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="emi-vehicle-purchase-inputs" class="grid grid-cols-1 sm:grid-cols-2 gap-4 transition-all duration-300">
+                                    <div>
+                                        <label class="text-[9px] uppercase text-slate-500 font-black tracking-widest mb-1.5 block">Vehicle Gross Price (₹)</label>
+                                        <input type="number" id="emi-price" oninput="calculateEmiPreview()" placeholder="0.00" class="w-full bg-slate-950/80 border border-slate-800/80 rounded-xl p-3 text-xs text-white outline-none focus:border-amber-500 font-mono font-bold shadow-inner">
+                                    </div>
+                                    <div>
+                                        <label class="text-[9px] uppercase text-slate-500 font-black tracking-widest mb-1.5 block">Down Payment Capital (₹)</label>
+                                        <input type="number" id="emi-down" oninput="calculateEmiPreview()" placeholder="0.00" class="w-full bg-slate-950/80 border border-slate-800/80 rounded-xl p-3 text-xs text-white outline-none focus:border-amber-500 font-mono font-bold shadow-inner">
+                                    </div>
+                                    <div>
+                                        <label class="text-[9px] uppercase text-slate-500 font-black tracking-widest mb-1.5 block">Processing File Charges (₹)</label>
+                                        <input type="number" id="emi-file" oninput="calculateEmiPreview()" placeholder="0.00" class="w-full bg-slate-950/80 border border-slate-800/80 rounded-xl p-3 text-xs text-slate-400 outline-none focus:border-amber-500 font-mono font-bold shadow-inner">
+                                    </div>
+                                    <div>
+                                        <label class="text-[9px] uppercase text-slate-500 font-black tracking-widest mb-1.5 block">Other External Charges (₹)</label>
+                                        <input type="number" id="emi-other" oninput="calculateEmiPreview()" placeholder="0.00" class="w-full bg-slate-950/80 border border-slate-800/80 rounded-xl p-3 text-xs text-slate-400 outline-none focus:border-amber-500 font-mono font-bold shadow-inner">
+                                    </div>
+                                </div>
+
+                                <div id="emi-loan-inputs" class="grid grid-cols-1 sm:grid-cols-2 gap-4 hidden transition-all duration-300">
+                                    <div>
+                                        <label class="text-[9px] uppercase text-slate-500 font-black tracking-widest mb-1.5 block">Principal Loan Amount (₹)</label>
+                                        <input type="number" id="emi-loan-amt" oninput="calculateEmiPreview()" placeholder="0.00" class="w-full bg-slate-950/80 border border-slate-800/80 rounded-xl p-3 text-xs text-white outline-none focus:border-cyan-500 font-mono font-bold shadow-inner">
+                                    </div>
+                                    <div>
+                                        <label class="text-[9px] uppercase text-slate-500 font-black tracking-widest mb-1.5 block">Insurance Cover Premium (₹)</label>
+                                        <input type="number" id="emi-ins-ch" oninput="calculateEmiPreview()" placeholder="0" class="w-full bg-slate-950/80 border border-slate-800/80 rounded-xl p-3 text-xs text-slate-400 outline-none focus:border-cyan-500 font-mono shadow-inner">
+                                    </div>
+                                    <div>
+                                        <label class="text-[9px] uppercase text-slate-500 font-black tracking-widest mb-1.5 block">RTO Passing Premium (₹)</label>
+                                        <input type="number" id="emi-pass-ch" oninput="calculateEmiPreview()" placeholder="0" class="w-full bg-slate-950/80 border border-slate-800/80 rounded-xl p-3 text-xs text-slate-400 outline-none focus:border-cyan-500 font-mono shadow-inner">
+                                    </div>
+                                    <div>
+                                        <label class="text-[9px] uppercase text-slate-500 font-black tracking-widest mb-1.5 block">Ownership Transfer Fee (₹)</label>
+                                        <input type="number" id="emi-trans-ch" oninput="calculateEmiPreview()" placeholder="0" class="w-full bg-slate-950/80 border border-slate-800/80 rounded-xl p-3 text-xs text-slate-400 outline-none focus:border-cyan-500 font-mono shadow-inner">
+                                    </div>
+                                    <div>
+                                        <label class="text-[9px] uppercase text-slate-500 font-black tracking-widest mb-1.5 block">HP Termination Fee (₹)</label>
+                                        <input type="number" id="emi-hp-term" oninput="calculateEmiPreview()" placeholder="0" class="w-full bg-slate-950/80 border border-slate-800/80 rounded-xl p-3 text-xs text-slate-400 outline-none focus:border-cyan-500 font-mono shadow-inner">
+                                    </div>
+                                    <div>
+                                        <label class="text-[9px] uppercase text-slate-500 font-black tracking-widest mb-1.5 block">Hypothecation Addition Fee (₹)</label>
+                                        <input type="number" id="emi-hp-add" oninput="calculateEmiPreview()" placeholder="0" class="w-full bg-slate-950/80 border border-slate-800/80 rounded-xl p-3 text-xs text-slate-400 outline-none focus:border-cyan-500 font-mono shadow-inner">
+                                    </div>
+                                    <div class="sm:col-span-2">
+                                        <label class="text-[9px] uppercase text-slate-500 font-black tracking-widest mb-1.5 block">Miscellaneous Charges (₹)</label>
+                                        <input type="number" id="emi-oth-ch" oninput="calculateEmiPreview()" placeholder="0" class="w-full bg-slate-950/80 border border-slate-800/80 rounded-xl p-3 text-xs text-slate-400 outline-none focus:border-cyan-500 font-mono shadow-inner">
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                                    <div>
+                                        <label class="text-[9px] uppercase text-slate-500 font-black tracking-widest mb-1.5 block">Interest Algorithm</label>
+                                        <div class="flex bg-slate-950 p-1 rounded-xl border border-slate-900 gap-1">
+                                            <button type="button" onclick="setInterestType('flat')" id="int-flat" class="flex-1 py-2 text-[11px] font-black rounded-lg transition-all border border-amber-500/30 bg-amber-500/10 text-amber-400 cursor-pointer">Flat Rate</button>
+                                            <button type="button" onclick="setInterestType('reducing')" id="int-reducing" class="flex-1 py-2 text-[11px] font-black rounded-lg transition-all border border-transparent text-slate-500 hover:text-slate-400 cursor-pointer">Reducing</button>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="text-[9px] uppercase text-slate-500 font-black tracking-widest mb-1.5 block" id="roi-label">Flat Rate Per Annum (%)</label>
+                                        <div class="relative">
+                                            <input type="number" id="emi-roi" oninput="calculateEmiPreview()" value="18.0" step="0.1" class="w-full bg-slate-950/80 border border-slate-800/80 rounded-xl p-3 text-xs text-amber-400 font-mono font-bold outline-none focus:border-amber-500 shadow-inner">
+                                            <span class="absolute right-3.5 top-3.5 text-xs font-bold text-slate-600">%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="xl:col-span-6 flex flex-col h-full space-y-4">
+                            <div class="premium-glass p-6 rounded-3xl flex-grow flex flex-col justify-between shadow-2xl relative min-h-[465px]">
+                                
+                                <div>
+                                    <h3 class="text-sm font-black text-white uppercase tracking-wider flex items-center justify-between border-b border-slate-800/80 pb-3">
+                                        <span class="flex items-center gap-2"><i class="fa-solid fa-chart-pie text-slate-500" id="matrix-icon"></i> Live Repayment Matrix</span>
+                                        <span id="calculated-net-loan" class="text-xs font-mono text-amber-400 font-black bg-slate-950 px-3 py-1.5 rounded-xl border border-slate-900 shadow-inner">Net Principal: ₹0.00</span>
+                                    </h3>
+
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6" id="emi-metrics-grid">
+                                        <div class="col-span-1 sm:col-span-2 text-center py-12 text-slate-600 font-medium text-xs border-2 border-dashed border-slate-900 rounded-2xl w-full">
+                                            <i class="fa-solid fa-calculator text-3xl mb-3 block text-slate-700 animate-pulse"></i>
+                                            Waiting for valid configuration parameters...
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="pt-6 border-t border-slate-800/80 mt-6">
+                                    <button type="button" onclick="generateQuotationPDF()" class="w-full bg-gradient-to-r from-amber-500 via-orange-500 to-yellow-500 hover:brightness-110 text-slate-950 font-black py-4 rounded-2xl transition duration-300 flex items-center justify-center gap-2 border border-amber-400/20 shadow-xl shadow-amber-500/5 uppercase tracking-widest text-xs cursor-pointer">
+                                        <i class="fa-solid fa-file-invoice-dollar text-sm"></i> Compile &amp; Export Premium PDF
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
             </div>
 
-            <!-- Card 2: DGVCL Light Bill -->
-            <div class="premium-card p-8 rounded-3xl flex flex-col justify-between">
-                <div>
-                    <div class="w-14 h-14 rounded-2xl bg-sky-500/10 text-sky-400 flex items-center justify-center text-2xl mb-6 border border-sky-500/20">
-                        <i class="fa-solid fa-lightbulb"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold text-white mb-3">DGVCL Light Bill</h3>
-                    <p class="text-sm text-slate-400 mb-8 leading-relaxed">
-                        Apna consumer number enter karke turant electricity bill check karein aur live payment invoice status nikalyein.
-                    </p>
-                </div>
-                <button onclick="openService('https://bps.dgvcl.co.in/BillDetail/index.php', 'DGVCL_Portal')" class="glow-button w-full bg-gradient-to-r from-sky-500/80 to-blue-600/80 hover:from-sky-400 hover:to-blue-500 text-slate-950 font-bold py-3.5 px-4 rounded-2xl transition duration-300 flex items-center justify-center gap-2 border border-sky-500/30 shadow-lg shadow-sky-500/10">
-                    View & Pay Bill <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
-                </button>
-            </div>
-
-            <!-- Card 3: Virtual Court Challan -->
-            <div class="premium-card p-8 rounded-3xl flex flex-col justify-between">
-                <div>
-                    <div class="w-14 h-14 rounded-2xl bg-rose-500/10 text-rose-400 flex items-center justify-center text-2xl mb-6 border border-rose-500/20">
-                        <i class="fa-solid fa-gavel"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold text-white mb-3">Virtual Court Challan</h3>
-                    <p class="text-sm text-slate-400 mb-8 leading-relaxed">
-                        Judicial e-court portals se traffic violations, summons aur court level online chalans ki live tracking aur disposal karein.
-                    </p>
-                </div>
-                <button onclick="openService('https://vcourts.gov.in/virtualcourt/', 'VirtualCourt_Portal')" class="glow-button w-full bg-gradient-to-r from-rose-500/80 to-red-600/80 hover:from-rose-400 hover:to-red-500 text-slate-950 font-bold py-3.5 px-4 rounded-2xl transition duration-300 flex items-center justify-center gap-2 border border-rose-500/30 shadow-lg shadow-rose-500/10">
-                    Open Virtual Court <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
-                </button>
-            </div>
-
-            <!-- Card 4: PUC Download -->
-            <div class="premium-card p-8 rounded-3xl flex flex-col justify-between">
-                <div>
-                    <div class="w-14 h-14 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-2xl mb-6 border border-emerald-500/20">
-                        <i class="fa-solid fa-smog"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold text-white mb-3">PUC Certificate</h3>
-                    <p class="text-sm text-slate-400 mb-8 leading-relaxed">
-                        Pollution Under Control (PUC) module se vehicle validity check karein aur system generated certificate download karein.
-                    </p>
-                </div>
-                <button onclick="openService('https://puc.parivahan.gov.in/puc/views/PucCertificate.xhtml', 'PUC_Portal')" class="glow-button w-full bg-gradient-to-r from-emerald-500/80 to-teal-600/80 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-bold py-3.5 px-4 rounded-2xl transition duration-300 flex items-center justify-center gap-2 border border-emerald-500/30 shadow-lg shadow-emerald-500/10">
-                    Download PUC PDF <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
-                </button>
-            </div>
-
-            <!-- Card 5: Regular Challan -->
-            <div class="premium-card p-8 rounded-3xl flex flex-col justify-between">
-                <div>
-                    <div class="w-14 h-14 rounded-2xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center text-2xl mb-6 border border-indigo-500/20">
-                        <i class="fa-solid fa-receipt"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold text-white mb-3">Regular Challan</h3>
-                    <p class="text-sm text-slate-400 mb-8 leading-relaxed">
-                        Direct Parivahan database se digital, spot ya camera generated speed tickets/challans check aur settle karein.
-                    </p>
-                </div>
-                <button onclick="openService('https://echallan.parivahan.gov.in/index/accused-challan', 'RegularChallan_Portal')" class="glow-button w-full bg-gradient-to-r from-indigo-500/80 to-purple-600/80 hover:from-indigo-400 hover:to-purple-500 text-slate-950 font-bold py-3.5 px-4 rounded-2xl transition duration-300 flex items-center justify-center gap-2 border border-indigo-500/30 shadow-lg shadow-indigo-500/10">
-                    Check Active Challans <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
-                </button>
-            </div>
-
-            <!-- Card 6: Aadhaar Card Download -->
-            <div class="premium-card p-8 rounded-3xl flex flex-col justify-between">
-                <div>
-                    <div class="w-14 h-14 rounded-2xl bg-purple-500/10 text-purple-400 flex items-center justify-center text-2xl mb-6 border border-purple-500/20">
-                        <i class="fa-solid fa-fingerprint"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold text-white mb-3">Aadhaar Card Download</h3>
-                    <p class="text-sm text-slate-400 mb-8 leading-relaxed">
-                        UIDAI myAadhaar portal se apna digital Aadhaar card safe aur secure tarike se download aur check karein.
-                    </p>
-                </div>
-                <button onclick="openService('https://myaadhaar.uidai.gov.in/genricDownloadAadhaar/en', 'Aadhaar_Portal')" class="glow-button w-full bg-gradient-to-r from-purple-500/80 to-indigo-600/80 hover:from-purple-400 hover:to-indigo-500 text-slate-950 font-bold py-3.5 px-4 rounded-2xl transition duration-300 flex items-center justify-center gap-2 border border-purple-500/30 shadow-lg shadow-purple-500/10">
-                    Download Aadhaar <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
-                </button>
-            </div>
-
-            <!-- Card 7: Pawan Auto Loan Portal -->
-            <div class="premium-card p-8 rounded-3xl flex flex-col justify-between">
-                <div>
-                    <div class="w-14 h-14 rounded-2xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center text-2xl mb-6 border border-cyan-500/20">
-                        <i class="fa-solid fa-wallet"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold text-white mb-3">Pawan Auto Loan</h3>
-                    <p class="text-sm text-slate-400 mb-8 leading-relaxed">
-                        Office software system se connected portal par login karke sabka Loan Account status aur active ledgers check karein.
-                    </p>
-                </div>
-                <button onclick="openService('https://pawanauto.tapandtype.com/login.php', 'PawanAuto_Portal')" class="glow-button w-full bg-gradient-to-r from-cyan-500/80 to-indigo-600/80 hover:from-cyan-400 hover:to-indigo-500 text-slate-950 font-bold py-3.5 px-4 rounded-2xl transition duration-300 flex items-center justify-center gap-2 border border-cyan-500/30 shadow-lg shadow-cyan-500/10">
-                    Open Loan Portal <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
-                </button>
-            </div>
-
-            <!-- Card 8: Cars24 Instant Challan -->
-            <div class="premium-card p-8 rounded-3xl flex flex-col justify-between">
-                <div>
-                    <div class="w-14 h-14 rounded-2xl bg-rose-500/10 text-rose-400 flex items-center justify-center text-2xl mb-6 border border-rose-500/20">
-                        <i class="fa-solid fa-shield-halved"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold text-white mb-3">Instant Challan Check</h3>
-                    <p class="text-sm text-slate-400 mb-8 leading-relaxed">
-                        Cars24 premium layout se bina kisi otp ya login jhanjhat ke instant gaadi number dalkar pending traffic tickets track karein.
-                    </p>
-                </div>
-                <button onclick="openService('https://www.cars24.com/traffic-challan/', 'Cars24Challan_Portal')" class="glow-button w-full bg-gradient-to-r from-rose-500/80 to-red-600/80 hover:from-rose-400 hover:to-red-500 text-slate-950 font-bold py-3.5 px-4 rounded-2xl transition duration-300 flex items-center justify-center gap-2 border border-rose-500/30 shadow-lg shadow-rose-500/10">
-                    Check Vehicle Challan <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
-                </button>
-            </div>
-
-            <!-- Card 9: Upcoming Utility Placeholder -->
-            <div class="premium-card p-8 rounded-3xl flex flex-col justify-between border-dashed border-2 border-slate-800 bg-slate-950/20">
-                <div class="opacity-50">
-                    <div class="w-14 h-14 rounded-2xl bg-slate-800 text-slate-500 flex items-center justify-center text-2xl mb-6 border border-slate-700">
-                        <i class="fa-solid fa-circle-plus"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold text-slate-300 mb-3">Naya Option</h3>
-                    <p class="text-sm text-slate-500 mb-8 leading-relaxed">
-                        Aap jo bhi naya portal batayenge, use hum log yahan agle update mein seamlessly link kar denge.
-                    </p>
-                </div>
-                <button disabled class="w-full bg-slate-900 text-slate-600 font-bold py-3.5 px-4 rounded-2xl border border-slate-800 cursor-not-allowed flex items-center justify-center gap-2">
-                    Coming Soon <i class="fa-solid fa-lock text-xs"></i>
-                </button>
-            </div>
-
-        </div>
-    </main>
-
-    <!-- Footer -->
-    <footer class="border-t border-slate-800/80 bg-slate-950/40 py-8 text-center text-sm text-slate-500">
-        <p>© 2026 Vikas Cyber-Hub. All visual designs & references belong to official authorities.</p>
-        <p class="mt-2 text-slate-600 text-xs">
-            <span class="text-cyan-500 font-bold">⚡ Fast</span> • 
-            <span class="text-indigo-400 font-bold">🛡️ Secure</span> • 
-            <span class="text-emerald-400 font-bold">🔒 Multi-Verified</span>
-        </p>
-    </footer>
+            <footer class="h-12 border-t border-slate-900/60 flex items-center justify-center bg-slate-950 flex-shrink-0 z-10 px-6">
+                <span class="text-[9px] uppercase font-black tracking-[0.2em] text-slate-600 font-mono">
+                    © ALL RESERVED RIGHT <span class="text-slate-400">VIKAS MISHRA</span>
+                </span>
+            </footer>
+        </main>
+    </div>
 
     <script>
-        // Track opened windows to prevent multi-tab session conflicts
-        const openedWindows = {};
-
-        function openService(url, targetName) {
-            const width = 1150;
-            const height = 800;
-            const left = (screen.width - width) / 2;
-            const top = (screen.height - height) / 2;
+        // ------------------ 🕒 REALTIME CLOCK MODULE ------------------
+        function initSystemClock() {
+            const clockTime = document.getElementById('clock-time');
+            const clockDate = document.getElementById('clock-date');
             
-            // Check if window reference exists and is not closed
-            if (openedWindows[targetName] && !openedWindows[targetName].closed) {
-                // Instantly bring existing window to the front instead of duplicate request
-                openedWindows[targetName].focus();
+            setInterval(() => {
+                const now = new Date();
+                
+                // Format Date
+                const options = { day: '2-digit', month: 'short', year: 'numeric' };
+                clockDate.innerText = now.toLocaleDateString('en-IN', options).toUpperCase();
+                
+                // Format Time (HH:MM:SS AM/PM)
+                let hours = now.getHours();
+                const minutes = String(now.getMinutes()).padStart(2, '0');
+                const seconds = String(now.getSeconds()).padStart(2, '0');
+                const ampm = hours >= 12 ? 'PM' : 'AM';
+                hours = hours % 12;
+                hours = hours ? hours : 12; // 12 hours conversion
+                const formattedHours = String(hours).padStart(2, '0');
+                
+                clockTime.innerText = `${formattedHours}:${minutes}:${seconds} ${ampm}`;
+            }, 1000);
+        }
+
+        // ------------------ 🔑 AUTH SYSTEM & DATABASE ------------------
+        let currentUser = null;
+
+        function getMockDatabase() {
+            let db = localStorage.getItem('ae_mock_users');
+            return db ? JSON.parse(db) : {};
+        }
+
+        function saveToMockDatabase(db) {
+            localStorage.setItem('ae_mock_users', JSON.stringify(db));
+        }
+
+        function toggleAuthTab(tab) {
+            const btnLogin = document.getElementById('tab-login');
+            const btnReg = document.getElementById('tab-register');
+            const formLogin = document.getElementById('login-form');
+            const formReg = document.getElementById('register-form');
+
+            if (tab === 'login') {
+                btnLogin.className = "flex-1 py-2.5 text-xs font-black rounded-xl transition-all bg-amber-500 text-slate-950 shadow-md cursor-pointer";
+                btnReg.className = "flex-1 py-2.5 text-xs font-black rounded-xl transition-all text-slate-400 hover:text-white cursor-pointer";
+                formLogin.classList.remove('hidden');
+                formReg.classList.add('hidden');
             } else {
-                // Open new secure isolated popup
-                openedWindows[targetName] = window.open(
-                    url, 
-                    targetName, 
-                    `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes,status=yes`
-                );
+                btnReg.className = "flex-1 py-2.5 text-xs font-black rounded-xl transition-all bg-amber-500 text-slate-950 shadow-md cursor-pointer";
+                btnLogin.className = "flex-1 py-2.5 text-xs font-black rounded-xl transition-all text-slate-400 hover:text-white cursor-pointer";
+                formReg.classList.remove('hidden');
+                formLogin.classList.add('hidden');
             }
         }
+
+        function handleRegister(e) {
+            e.preventDefault();
+            const phone = document.getElementById('reg-phone').value.trim();
+            const pass = document.getElementById('reg-password').value;
+            const secret = document.getElementById('reg-secret').value.trim();
+
+            // Secret key validation
+            if (secret !== '9696') {
+                alert('🚨 ERROR: Critical Security Key Mismatch! Access Denied.');
+                return;
+            }
+
+            const db = getMockDatabase();
+            if (db[phone]) {
+                alert('🚫 User Account already registered on this Mobile Number!');
+                return;
+            }
+
+            db[phone] = { phone, password: pass };
+            saveToMockDatabase(db);
+
+            alert('✅ Success! Premium Account Authorized successfully. Please Login.');
+            document.getElementById('register-form').reset();
+            toggleAuthTab('login');
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const phone = document.getElementById('login-phone').value.trim();
+            const pass = document.getElementById('login-password').value;
+
+            const db = getMockDatabase();
+            if (db[phone] && db[phone].password === pass) {
+                // Set Session
+                localStorage.setItem('ae_active_session', phone);
+                launchConsole(phone);
+            } else {
+                alert('❌ Invalid Credentials! Unauthorized operation.');
+            }
+        }
+
+        function checkExistingSession() {
+            const activeSession = localStorage.getItem('ae_active_session');
+            if (activeSession) {
+                launchConsole(activeSession);
+            }
+        }
+
+        function launchConsole(phone) {
+            currentUser = phone;
+            document.getElementById('operator-phone').innerText = phone;
+            document.getElementById('auth-screen').classList.add('hidden');
+            document.getElementById('main-dashboard').classList.remove('hidden');
+            initSystemClock();
+        }
+
+        function handleLogout() {
+            if (confirm('Are you sure you want to disconnect secure enterprise session?')) {
+                localStorage.removeItem('ae_active_session');
+                location.reload();
+            }
+        }
+
+        // ------------------ 🧭 NAVIGATION LOGIC ------------------
+        function toggleSidebarAccordion(id) {
+            const pMenu = document.getElementById(id);
+            const icon = document.getElementById('pawan-chevron');
+            if (pMenu.classList.contains('hidden')) {
+                pMenu.classList.remove('hidden');
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                pMenu.classList.add('hidden');
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        function switchTab(tabId) {
+            // Remove active style from all navigation buttons
+            document.getElementById('tab-btn-emi-count').classList.remove('sidebar-item-active');
+            
+            // Hide all panels
+            document.getElementById('panel-welcome').classList.add('hidden');
+            document.getElementById('panel-emi-count').classList.add('hidden');
+
+            if (tabId === 'emi-count') {
+                document.getElementById('tab-btn-emi-count').classList.add('sidebar-item-active');
+                document.getElementById('panel-emi-count').classList.remove('hidden');
+                calculateEmiPreview(); // triggers calculation preview engine
+            }
+        }
+
+
+        // =========================================================================
+        // 🧮 PAWAN AUTO FINANCE: DYNAMIC EMI ENGINE CORE LOGIC
+        // =========================================================================
+        let currentEmiMode = 'vehicle';
+        let currentInterestType = 'flat';
+
+        function setEmiMode(mode) {
+            currentEmiMode = mode;
+            const vInputs = document.getElementById('emi-vehicle-purchase-inputs');
+            const lInputs = document.getElementById('emi-loan-inputs');
+            const vBtn = document.getElementById('mode-btn-vehicle');
+            const lBtn = document.getElementById('mode-btn-loan');
+
+            if (mode === 'vehicle') {
+                vInputs.classList.remove('hidden');
+                lInputs.classList.add('hidden');
+                vBtn.className = "flex-1 py-2 text-xs font-black rounded-lg transition-all bg-amber-500 text-slate-950 font-bold shadow-md cursor-pointer";
+                lBtn.className = "flex-1 py-2 text-xs font-black rounded-lg transition-all text-slate-400 hover:text-slate-300 cursor-pointer";
+            } else {
+                vInputs.classList.add('hidden');
+                lInputs.classList.remove('hidden');
+                lBtn.className = "flex-1 py-2 text-xs font-black rounded-lg transition-all bg-amber-500 text-slate-950 font-bold shadow-md cursor-pointer";
+                vBtn.className = "flex-1 py-2 text-xs font-black rounded-lg transition-all text-slate-400 hover:text-slate-300 cursor-pointer";
+            }
+            calculateEmiPreview();
+        }
+
+        function setInterestType(type) {
+            currentInterestType = type;
+            const flatBtn = document.getElementById('int-flat');
+            const redBtn = document.getElementById('int-reducing');
+            const roiLabel = document.getElementById('roi-label');
+
+            if (type === 'flat') {
+                roiLabel.innerText = "Flat Rate Per Annum (%)";
+                flatBtn.className = "flex-1 py-2 text-[11px] font-black rounded-lg transition-all border border-amber-500/30 bg-amber-500/10 text-amber-400 cursor-pointer";
+                redBtn.className = "flex-1 py-2 text-[11px] font-black rounded-lg transition-all border border-transparent text-slate-500 hover:text-slate-400 cursor-pointer";
+            } else {
+                roiLabel.innerText = "Reducing Rate Per Annum (%)";
+                redBtn.className = "flex-1 py-2 text-[11px] font-black rounded-lg transition-all border border-amber-500/30 bg-amber-500/10 text-amber-400 cursor-pointer";
+                flatBtn.className = "flex-1 py-2 text-[11px] font-black rounded-lg transition-all border border-transparent text-slate-500 hover:text-slate-400 cursor-pointer";
+            }
+            calculateEmiPreview();
+        }
+
+        function calculateEmiPreview() {
+            let principal = 0;
+            
+            // Extract inputs values
+            if (currentEmiMode === 'vehicle') {
+                const price = parseFloat(document.getElementById('emi-price').value) || 0;
+                const downPayment = parseFloat(document.getElementById('emi-down').value) || 0;
+                const fileCharges = parseFloat(document.getElementById('emi-file').value) || 0;
+                const otherCharges = parseFloat(document.getElementById('emi-other').value) || 0;
+                
+                principal = (price - downPayment) + fileCharges + otherCharges;
+            } else {
+                const loanAmt = parseFloat(document.getElementById('emi-loan-amt').value) || 0;
+                const insCh = parseFloat(document.getElementById('emi-ins-ch').value) || 0;
+                const passCh = parseFloat(document.getElementById('emi-pass-ch').value) || 0;
+                const transCh = parseFloat(document.getElementById('emi-trans-ch').value) || 0;
+                const hpTerm = parseFloat(document.getElementById('emi-hp-term').value) || 0;
+                const hpAdd = parseFloat(document.getElementById('emi-hp-add').value) || 0;
+                const othCh = parseFloat(document.getElementById('emi-oth-ch').value) || 0;
+
+                principal = loanAmt + insCh + passCh + transCh + hpTerm + hpAdd + othCh;
+            }
+
+            // Update principal label UI
+            document.getElementById('calculated-net-loan').innerText = `Net Principal: ₹${principal.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+
+            const metricsGrid = document.getElementById('emi-metrics-grid');
+            if (principal <= 0) {
+                metricsGrid.innerHTML = `
+                    <div class="col-span-1 sm:col-span-2 text-center py-12 text-slate-600 font-medium text-xs border-2 border-dashed border-slate-900 rounded-2xl w-full">
+                        <i class="fa-solid fa-calculator text-3xl mb-3 block text-slate-700 animate-pulse"></i>
+                        Waiting for valid configuration parameters...
+                    </div>
+                `;
+                return;
+            }
+
+            const annualRoi = parseFloat(document.getElementById('emi-roi').value) || 0;
+            const tenures = [12, 18, 24, 36];
+            let htmlGridContent = '';
+
+            tenures.forEach(months => {
+                let monthlyEmi = 0;
+                let totalRepay = 0;
+                let totalInterest = 0;
+
+                if (currentInterestType === 'flat') {
+                    const years = months / 12;
+                    totalInterest = (principal * annualRoi * years) / 100;
+                    totalRepay = principal + totalInterest;
+                    monthlyEmi = totalRepay / months;
+                } else {
+                    const monthlyRoi = (annualRoi / 12) / 100;
+                    if (monthlyRoi > 0) {
+                        monthlyEmi = (principal * monthlyRoi * Math.pow(1 + monthlyRoi, months)) / (Math.pow(1 + monthlyRoi, months) - 1);
+                        totalRepay = monthlyEmi * months;
+                        totalInterest = totalRepay - principal;
+                    } else {
+                        monthlyEmi = principal / months;
+                        totalRepay = principal;
+                        totalInterest = 0;
+                    }
+                }
+
+                htmlGridContent += `
+                    <div class="bg-slate-900/40 p-4 rounded-2xl flex flex-col justify-between border border-slate-800/80 hover:border-amber-500/30 transition-all">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-[10px] bg-amber-500/10 text-amber-400 font-mono font-black px-2 py-0.5 rounded-md border border-amber-500/20">${months} Months</span>
+                            <i class="fa-solid fa-shield text-[10px] text-slate-700"></i>
+                        </div>
+                        <div>
+                            <p class="text-[9px] text-slate-500 uppercase font-black tracking-wider">Installment Value</p>
+                            <h4 class="text-lg font-black text-white font-mono mt-0.5">₹${Math.round(monthlyEmi).toLocaleString('en-IN')}</h4>
+                        </div>
+                        <div class="mt-3 pt-2.5 border-t border-slate-900 space-y-1 text-[10px] font-mono text-slate-400">
+                            <div class="flex justify-between">
+                                <span class="text-slate-600">Interest:</span>
+                                <span class="font-bold text-slate-300">₹${Math.round(totalInterest).toLocaleString('en-IN')}</span>
+                            </div>
+                            <div class="flex justify-between border-t border-slate-950 pt-1">
+                                <span class="text-slate-600">Gross Return:</span>
+                                <span class="font-bold text-amber-500">₹${Math.round(totalRepay).toLocaleString('en-IN')}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            metricsGrid.innerHTML = htmlGridContent;
+        }
+
+        // --- PDF generation mock & custom system printing template ---
+        function generateQuotationPDF() {
+            const customer = document.getElementById('emi-cust-name').value || 'VALUED CUSTOMER';
+            const vehicle = document.getElementById('emi-veh-name').value || 'SPECIFIED VEHICLE';
+            
+            alert(`⚡ Preparing Quotation Record... \n\nClient Name: "${customer.toUpperCase()}" \nVehicle Asset: "${vehicle.toUpperCase()}". \n\nOpening System Print Template!`);
+            window.print();
+        }
+
+        // Initialize session checks on page load
+        window.onload = function() {
+            checkExistingSession();
+        };
     </script>
 </body>
 </html>
