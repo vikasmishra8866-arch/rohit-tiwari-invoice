@@ -309,31 +309,28 @@
                     <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
                         <div class="mb-6">
                             <h2 class="text-xl font-bold text-white tracking-wide">Vehicle Transfer & Passing Micro-Engine</h2>
-                            <p class="text-xs text-slate-400 mt-0.5">Real-time matching from Connected Excel Database</p>
+                            <p class="text-xs text-slate-400 mt-0.5">Real-time partial matching and live records data ingestion lookup</p>
                         </div>
 
-                        <div class="max-w-xl relative mb-8 space-y-4">
-                            <div>
-                                <label for="rto-search-box" class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Search Vehicle Number (REG.NO)</label>
-                                <div class="relative rounded-xl shadow-sm">
-                                    <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
-                                        <i class="fa-solid fa-magnifying-glass text-xs"></i>
-                                    </div>
-                                    <input type="text" id="rto-search-box" autocomplete="off" oninput="handleRtoInput(this.value)" placeholder="Type digits or characters (e.g. 2328)" class="block w-full pl-10 pr-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-white font-mono placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-yellow-400/50 focus:border-yellow-400 transition-all text-sm uppercase">
+                        <div class="max-w-xl relative mb-8">
+                            <label for="rto-search-box" class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Search Vehicle Number (REG.NO)</label>
+                            <div class="relative rounded-xl shadow-sm">
+                                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+                                    <i class="fa-solid fa-magnifying-glass text-xs"></i>
                                 </div>
-
-                                <div id="rto-suggestions-dropdown" class="hidden absolute left-0 right-0 mt-1 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl z-30 max-h-60 overflow-y-auto divide-y divide-slate-800/60">
-                                    </div>
+                                <input type="text" id="rto-search-box" autocomplete="off" oninput="handleRtoInput(this.value)" placeholder="Type digits or characters (e.g. 2328 or GJ05)" class="block w-full pl-10 pr-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-white font-mono placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-yellow-400/50 focus:border-yellow-400 transition-all text-sm uppercase">
                             </div>
 
-                            <button type="button" onclick="triggerManualSearch()" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-md text-sm font-bold text-slate-950 bg-yellow-400 hover:bg-yellow-300 focus:outline-none transition-all duration-200">
-                                <i class="fa-solid fa-database mr-2 mt-0.5"></i> GET DETAILS FROM EXCEL
-                            </button>
+                            <div id="rto-suggestions-dropdown" class="hidden absolute left-0 right-0 mt-1 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl z-30 max-h-60 overflow-y-auto divide-y divide-slate-800/60">
+                                </div>
                         </div>
 
                         <div id="rto-skeleton-loader" class="hidden space-y-4">
                             <div class="h-6 bg-slate-800/40 rounded w-1/4 animate-pulse"></div>
                             <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                                <div class="h-16 bg-slate-800/30 rounded-xl animate-pulse"></div>
+                                <div class="h-16 bg-slate-800/30 rounded-xl animate-pulse"></div>
+                                <div class="h-16 bg-slate-800/30 rounded-xl animate-pulse"></div>
                                 <div class="h-16 bg-slate-800/30 rounded-xl animate-pulse"></div>
                                 <div class="h-16 bg-slate-800/30 rounded-xl animate-pulse"></div>
                                 <div class="h-16 bg-slate-800/30 rounded-xl animate-pulse"></div>
@@ -344,9 +341,11 @@
                             <div class="border-t border-slate-800 pt-4">
                                 <span class="text-[10px] font-bold tracking-widest text-yellow-400 uppercase bg-yellow-400/10 px-2.5 py-1 rounded border border-yellow-400/20">LIVE METADATA RECORD FOUND</span>
                             </div>
+                            
                             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="rto-metrics-grid">
                                 </div>
                         </div>
+
                     </div>
                 </section>
 
@@ -856,145 +855,75 @@
         // ==================== 🔍 TAB C: LIVE SUGGESTION & RTO DATA ENGINE ====================
         
         // Background Asynchronous Prefetch Sequence from Web Apps Script Macro Endpoint
-        async // ==================== 🔍 TAB C: EXCEL LIVE SUGGESTION & DETAILED ENGINE ====================
-        
-        // 1. Live Fetch from Excel Web App Script (Fixing CORS & Redirection)
         async function prefetchRtoCloudMatrix() {
             if (rtoCacheDataset.length > 0 || isFetchingRtoData) return;
             isFetchingRtoData = true;
             
             try {
-                const response = await fetch(RTO_API_ENDPOINT, {
-                    method: 'GET',
-                    mode: 'cors',
-                    credentials: 'omit'
-                });
+                const response = await fetch(RTO_API_ENDPOINT);
                 const resultData = await response.json();
                 
+                // Validate payload array interface
                 if (Array.isArray(resultData)) {
                     rtoCacheDataset = resultData;
-                    console.log(`Excel Synced: ${rtoCacheDataset.length} rows indexed.`);
-                } else {
-                    console.error("Payload Format Error: Excel script did not return an array.");
+                    console.log(`Successfully indexed ${rtoCacheDataset.length} vehicle logs from cloud infrastructure node.`);
                 }
             } catch (err) {
-                console.error("Critical Excel Sync Error:", err);
+                console.error("Critical Cloud Data Sync Interruption:", err);
             } finally {
                 isFetchingRtoData = false;
             }
         }
 
-        // 2. Typing Suggestion Dropdown
+        // Handle typing input runtime context stream
         function handleRtoInput(query) {
             const normalizedQuery = query.trim().toUpperCase();
             const dropdown = document.getElementById('rto-suggestions-dropdown');
             
-            if (!normalizedQuery || rtoCacheDataset.length === 0) {
+            if (!normalizedQuery) {
                 dropdown.classList.add('hidden');
+                dropdown.innerHTML = '';
                 return;
             }
 
+            // Perform robust multi-facet criteria partial matching algorithms
+            // Searches anywhere within strings or explicitly inside REG.NO parameters
             const matchedRows = rtoCacheDataset.filter(row => {
                 const regNo = String(row["REG.NO"] || '').toUpperCase();
-                const name = String(row["CUSTOMER NAME"] || '').toUpperCase();
-                return regNo.includes(normalizedQuery) || name.includes(normalizedQuery);
+                const custName = String(row["CUSTOMER NAME"] || '').toUpperCase();
+                return regNo.includes(normalizedQuery) || custName.includes(normalizedQuery);
             });
 
-            const preview = matchedRows.slice(0, 6);
-            if (preview.length === 0) {
-                dropdown.innerHTML = `<div class="p-3 text-xs text-slate-500 italic">No exact vehicle found in cache</div>`;
+            // Limit preview subset stack limit to prevent browser frame rate dropping
+            const visualPreviewList = matchedRows.slice(0, 8);
+
+            if (visualPreviewList.length === 0) {
+                dropdown.innerHTML = `<div class="p-3 text-xs text-slate-500 italic"><i class="fa-solid fa-ghost mr-1.5"></i>No matching records indexed</div>`;
                 dropdown.classList.remove('hidden');
                 return;
             }
 
             dropdown.innerHTML = '';
-            preview.forEach(record => {
-                const choice = document.createElement('button');
-                choice.type = "button";
-                choice.className = "w-full text-left px-4 py-2.5 text-xs hover:bg-slate-800 text-white transition-colors flex justify-between items-center";
-                choice.innerHTML = `<span class="font-mono font-bold">${record["REG.NO"]}</span><span class="text-[10px] text-slate-400 truncate max-w-[150px]">${record["CUSTOMER NAME"] || ''}</span>`;
-                choice.onclick = () => {
-                    document.getElementById('rto-search-box').value = record["REG.NO"];
-                    dropdown.classList.add('hidden');
-                };
-                dropdown.appendChild(choice);
+            visualPreviewList.forEach(record => {
+                const choiceItem = document.createElement('button');
+                choiceItem.type = "button";
+                choiceItem.className = "w-full text-left px-4 py-2.5 text-xs hover:bg-slate-800 transition-colors flex justify-between items-center group";
+                choiceItem.innerHTML = `
+                    <div class="font-mono font-bold text-white group-hover:text-yellow-400">
+                        <i class="fa-solid fa-car text-[10px] mr-2 text-slate-500 group-hover:text-yellow-400/80"></i>${record["REG.NO"]}
+                    </div>
+                    <div class="text-[10px] text-slate-400 truncate max-w-[180px] uppercase font-medium">${record["CUSTOMER NAME"] || 'N/A'}</div>
+                `;
+                
+                // Setup click selection handler intercept
+                choiceItem.onclick = () => selectVehicleRecord(record);
+                dropdown.appendChild(choiceItem);
             });
             dropdown.classList.remove('hidden');
         }
 
-        // 3. User Trigger Click Engine (Get Details Button Function)
-        function triggerManualSearch() {
-            const inputVal = document.getElementById('rto-search-box').value.trim().toUpperCase();
-            if (!inputVal) {
-                showNotification("Please enter or select a Vehicle Number first!", "error");
-                return;
-            }
-
-            if (rtoCacheDataset.length === 0) {
-                showNotification("Database loading/syncing background me chal rha hai, 2 second baad click karein.", "info");
-                prefetchRtoCloudMatrix();
-                return;
-            }
-
-            const exactMatch = rtoCacheDataset.find(row => String(row["REG.NO"] || '').toUpperCase() === inputVal);
-            const fallbackMatch = exactMatch || rtoCacheDataset.find(row => String(row["REG.NO"] || '').toUpperCase().includes(inputVal));
-
-            if (fallbackMatch) {
-                renderVehicleOutput(fallbackMatch);
-            } else {
-                showNotification(`Vehicle '${inputVal}' Excel data table me nahi mila!`, "error");
-            }
-        }
-
-        // 4. Render output matrix inside dashboard layout
-        function renderVehicleOutput(targetRecord) {
-            const skeleton = document.getElementById('rto-skeleton-loader');
-            const dataDisplay = document.getElementById('rto-data-display-card');
-            const metricsGrid = document.getElementById('rto-metrics-grid');
-
-            dataDisplay.classList.add('hidden');
-            skeleton.classList.remove('hidden');
-
-            setTimeout(() => {
-                skeleton.classList.add('hidden');
-                metricsGrid.innerHTML = '';
-
-                const mappingHeaders = [
-                    { label: "Serial Index", key: "SR.NO", icon: "fa-hashtag" },
-                    { label: "Customer Name", key: "CUSTOMER NAME", icon: "fa-user" },
-                    { label: "Registration No", key: "REG.NO", icon: "fa-id-card-clip" },
-                    { label: "Mobile Number", key: "MO. NO", icon: "fa-mobile-screen" },
-                    { label: "Assigned Agent", key: "AGENT", icon: "fa-user-tie" },
-                    { label: "Vehicle For", key: "VEHICLE.FOR", icon: "fa-truck-ramp-box" },
-                    { label: "Engine Number", key: "EN.NO", icon: "fa-gears" },
-                    { label: "Chassis Number", key: "CH.NO", icon: "fa-barcode" },
-                    { label: "Filing Date", key: "DATE", icon: "fa-calendar-check" }
-                ];
-
-                mappingHeaders.forEach(header => {
-                    const card = document.createElement('div');
-                    card.className = "bg-slate-950 p-4 rounded-xl border border-slate-850 flex items-start space-x-3";
-                    let resolvedValue = targetRecord[header.key] !== undefined ? String(targetRecord[header.key]) : 'N/A';
-                    
-                    if (header.key === 'DATE' && resolvedValue.includes('T')) {
-                        resolvedValue = resolvedValue.split('T')[0];
-                    }
-
-                    card.innerHTML = `
-                        <div class="p-2 bg-slate-900 rounded-lg text-slate-400 mt-0.5 border border-slate-800">
-                            <i class="fa-solid ${header.icon} text-xs text-yellow-400/80"></i>
-                        </div>
-                        <div>
-                            <span class="text-[10px] uppercase font-bold text-slate-500 tracking-wider block">${header.label}</span>
-                            <span class="text-xs font-semibold text-white tracking-wide font-mono select-all mt-0.5 block">${resolvedValue}</span>
-                        </div>
-                    `;
-                    metricsGrid.appendChild(card);
-                });
-
-                dataDisplay.classList.remove('hidden');
-            }, 500);
-        }
+        // Selection Resolution execution path
+        function selectVehicleRecord(targetRecord) {
             const dropdown = document.getElementById('rto-suggestions-dropdown');
             const searchInput = document.getElementById('rto-search-box');
             const skeleton = document.getElementById('rto-skeleton-loader');
