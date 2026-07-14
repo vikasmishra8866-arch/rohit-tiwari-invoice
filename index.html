@@ -856,75 +856,145 @@
         // ==================== 🔍 TAB C: LIVE SUGGESTION & RTO DATA ENGINE ====================
         
         // Background Asynchronous Prefetch Sequence from Web Apps Script Macro Endpoint
+        async // ==================== 🔍 TAB C: EXCEL LIVE SUGGESTION & DETAILED ENGINE ====================
+        
+        // 1. Live Fetch from Excel Web App Script (Fixing CORS & Redirection)
         async function prefetchRtoCloudMatrix() {
             if (rtoCacheDataset.length > 0 || isFetchingRtoData) return;
             isFetchingRtoData = true;
             
             try {
-                const response = await fetch(RTO_API_ENDPOINT);
+                const response = await fetch(RTO_API_ENDPOINT, {
+                    method: 'GET',
+                    mode: 'cors',
+                    credentials: 'omit'
+                });
                 const resultData = await response.json();
                 
-                // Validate payload array interface
                 if (Array.isArray(resultData)) {
                     rtoCacheDataset = resultData;
-                    console.log(`Successfully indexed ${rtoCacheDataset.length} vehicle logs from cloud infrastructure node.`);
+                    console.log(`Excel Synced: ${rtoCacheDataset.length} rows indexed.`);
+                } else {
+                    console.error("Payload Format Error: Excel script did not return an array.");
                 }
             } catch (err) {
-                console.error("Critical Cloud Data Sync Interruption:", err);
+                console.error("Critical Excel Sync Error:", err);
             } finally {
                 isFetchingRtoData = false;
             }
         }
 
-        // Handle typing input runtime context stream
+        // 2. Typing Suggestion Dropdown
         function handleRtoInput(query) {
             const normalizedQuery = query.trim().toUpperCase();
             const dropdown = document.getElementById('rto-suggestions-dropdown');
             
-            if (!normalizedQuery) {
+            if (!normalizedQuery || rtoCacheDataset.length === 0) {
                 dropdown.classList.add('hidden');
-                dropdown.innerHTML = '';
                 return;
             }
 
-            // Perform robust multi-facet criteria partial matching algorithms
-            // Searches anywhere within strings or explicitly inside REG.NO parameters
             const matchedRows = rtoCacheDataset.filter(row => {
                 const regNo = String(row["REG.NO"] || '').toUpperCase();
-                const custName = String(row["CUSTOMER NAME"] || '').toUpperCase();
-                return regNo.includes(normalizedQuery) || custName.includes(normalizedQuery);
+                const name = String(row["CUSTOMER NAME"] || '').toUpperCase();
+                return regNo.includes(normalizedQuery) || name.includes(normalizedQuery);
             });
 
-            // Limit preview subset stack limit to prevent browser frame rate dropping
-            const visualPreviewList = matchedRows.slice(0, 8);
-
-            if (visualPreviewList.length === 0) {
-                dropdown.innerHTML = `<div class="p-3 text-xs text-slate-500 italic"><i class="fa-solid fa-ghost mr-1.5"></i>No matching records indexed</div>`;
+            const preview = matchedRows.slice(0, 6);
+            if (preview.length === 0) {
+                dropdown.innerHTML = `<div class="p-3 text-xs text-slate-500 italic">No exact vehicle found in cache</div>`;
                 dropdown.classList.remove('hidden');
                 return;
             }
 
             dropdown.innerHTML = '';
-            visualPreviewList.forEach(record => {
-                const choiceItem = document.createElement('button');
-                choiceItem.type = "button";
-                choiceItem.className = "w-full text-left px-4 py-2.5 text-xs hover:bg-slate-800 transition-colors flex justify-between items-center group";
-                choiceItem.innerHTML = `
-                    <div class="font-mono font-bold text-white group-hover:text-yellow-400">
-                        <i class="fa-solid fa-car text-[10px] mr-2 text-slate-500 group-hover:text-yellow-400/80"></i>${record["REG.NO"]}
-                    </div>
-                    <div class="text-[10px] text-slate-400 truncate max-w-[180px] uppercase font-medium">${record["CUSTOMER NAME"] || 'N/A'}</div>
-                `;
-                
-                // Setup click selection handler intercept
-                choiceItem.onclick = () => selectVehicleRecord(record);
-                dropdown.appendChild(choiceItem);
+            preview.forEach(record => {
+                const choice = document.createElement('button');
+                choice.type = "button";
+                choice.className = "w-full text-left px-4 py-2.5 text-xs hover:bg-slate-800 text-white transition-colors flex justify-between items-center";
+                choice.innerHTML = `<span class="font-mono font-bold">${record["REG.NO"]}</span><span class="text-[10px] text-slate-400 truncate max-w-[150px]">${record["CUSTOMER NAME"] || ''}</span>`;
+                choice.onclick = () => {
+                    document.getElementById('rto-search-box').value = record["REG.NO"];
+                    dropdown.classList.add('hidden');
+                };
+                dropdown.appendChild(choice);
             });
             dropdown.classList.remove('hidden');
         }
 
-        // Selection Resolution execution path
-        function selectVehicleRecord(targetRecord) {
+        // 3. User Trigger Click Engine (Get Details Button Function)
+        function triggerManualSearch() {
+            const inputVal = document.getElementById('rto-search-box').value.trim().toUpperCase();
+            if (!inputVal) {
+                showNotification("Please enter or select a Vehicle Number first!", "error");
+                return;
+            }
+
+            if (rtoCacheDataset.length === 0) {
+                showNotification("Database loading/syncing background me chal rha hai, 2 second baad click karein.", "info");
+                prefetchRtoCloudMatrix();
+                return;
+            }
+
+            const exactMatch = rtoCacheDataset.find(row => String(row["REG.NO"] || '').toUpperCase() === inputVal);
+            const fallbackMatch = exactMatch || rtoCacheDataset.find(row => String(row["REG.NO"] || '').toUpperCase().includes(inputVal));
+
+            if (fallbackMatch) {
+                renderVehicleOutput(fallbackMatch);
+            } else {
+                showNotification(`Vehicle '${inputVal}' Excel data table me nahi mila!`, "error");
+            }
+        }
+
+        // 4. Render output matrix inside dashboard layout
+        function renderVehicleOutput(targetRecord) {
+            const skeleton = document.getElementById('rto-skeleton-loader');
+            const dataDisplay = document.getElementById('rto-data-display-card');
+            const metricsGrid = document.getElementById('rto-metrics-grid');
+
+            dataDisplay.classList.add('hidden');
+            skeleton.classList.remove('hidden');
+
+            setTimeout(() => {
+                skeleton.classList.add('hidden');
+                metricsGrid.innerHTML = '';
+
+                const mappingHeaders = [
+                    { label: "Serial Index", key: "SR.NO", icon: "fa-hashtag" },
+                    { label: "Customer Name", key: "CUSTOMER NAME", icon: "fa-user" },
+                    { label: "Registration No", key: "REG.NO", icon: "fa-id-card-clip" },
+                    { label: "Mobile Number", key: "MO. NO", icon: "fa-mobile-screen" },
+                    { label: "Assigned Agent", key: "AGENT", icon: "fa-user-tie" },
+                    { label: "Vehicle For", key: "VEHICLE.FOR", icon: "fa-truck-ramp-box" },
+                    { label: "Engine Number", key: "EN.NO", icon: "fa-gears" },
+                    { label: "Chassis Number", key: "CH.NO", icon: "fa-barcode" },
+                    { label: "Filing Date", key: "DATE", icon: "fa-calendar-check" }
+                ];
+
+                mappingHeaders.forEach(header => {
+                    const card = document.createElement('div');
+                    card.className = "bg-slate-950 p-4 rounded-xl border border-slate-850 flex items-start space-x-3";
+                    let resolvedValue = targetRecord[header.key] !== undefined ? String(targetRecord[header.key]) : 'N/A';
+                    
+                    if (header.key === 'DATE' && resolvedValue.includes('T')) {
+                        resolvedValue = resolvedValue.split('T')[0];
+                    }
+
+                    card.innerHTML = `
+                        <div class="p-2 bg-slate-900 rounded-lg text-slate-400 mt-0.5 border border-slate-800">
+                            <i class="fa-solid ${header.icon} text-xs text-yellow-400/80"></i>
+                        </div>
+                        <div>
+                            <span class="text-[10px] uppercase font-bold text-slate-500 tracking-wider block">${header.label}</span>
+                            <span class="text-xs font-semibold text-white tracking-wide font-mono select-all mt-0.5 block">${resolvedValue}</span>
+                        </div>
+                    `;
+                    metricsGrid.appendChild(card);
+                });
+
+                dataDisplay.classList.remove('hidden');
+            }, 500);
+        }
             const dropdown = document.getElementById('rto-suggestions-dropdown');
             const searchInput = document.getElementById('rto-search-box');
             const skeleton = document.getElementById('rto-skeleton-loader');
